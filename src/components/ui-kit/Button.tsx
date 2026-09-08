@@ -97,5 +97,7 @@ export const Button = ({
     <button type={type} className={classes} onClick={onClick} disabled={disabled} aria-label={ariaLabel}>{inner}</button>
   );
 
-  return magnetic ? <Magnetic>{node}</Magnetic> : node;
+  // A magnetic pill asked to be full width must let its inline wrapper stretch on small screens.
+  const fullWidth = className?.includes("w-full");
+  return magnetic ? <Magnetic className={fullWidth ? "block w-full sm:inline-block sm:w-auto" : undefined}>{node}</Magnetic> : node;
 };
