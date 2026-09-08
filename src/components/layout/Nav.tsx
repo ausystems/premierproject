@@ -14,6 +14,17 @@ const LINKS = [
   { to: "/contact", label: "Contact" },
 ];
 
+// Theme of the first section of each route, so the very first paint already shows the right logo
+// (the observer below takes over as soon as the reader scrolls). Unknown routes are the ink 404.
+const FIRST_SECTION_THEME: Record<string, "ink" | "paper"> = {
+  "/": "ink",
+  "/about": "paper",
+  "/programs": "ink",
+  "/contact": "paper",
+  "/referral": "paper",
+};
+const themeFor = (pathname: string): "ink" | "paper" => FIRST_SECTION_THEME[pathname] ?? "ink";
+
 /**
  * Transparent fixed bar. Its colour follows whichever data-theme section sits under it,
  * it hides on scroll-down and returns on scroll-up (fine pointers only), and under 1024px
@@ -21,13 +32,14 @@ const LINKS = [
  */
 export const Nav = () => {
   const { pathname } = useLocation();
-  const [theme, setTheme] = useState<"ink" | "paper">("ink");
+  const [theme, setTheme] = useState<"ink" | "paper">(() => themeFor(pathname));
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const lastY = useRef(0);
 
   // Which themed section is under the bar right now.
   useEffect(() => {
+    setTheme(themeFor(pathname));
     const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-theme]"));
     if (!sections.length) return;
     const io = new IntersectionObserver(
