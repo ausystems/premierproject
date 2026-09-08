@@ -75,7 +75,7 @@ export const PageTransition = ({ children }: { children: ReactNode }) => {
         data-theme="ink"
         className="pointer-events-none fixed inset-0 z-[70] flex items-center justify-center [clip-path:inset(100%_0_0_0)]"
       >
-        <img ref={logo} src={LOGO} alt="" width={384} height={256} decoding="async" className="h-16 w-auto opacity-0 md:h-24" />
+        <img ref={logo} src={LOGO} alt="" width={384} height={256} decoding="async" className="h-20 w-auto opacity-0 md:h-32" />
       </div>
     </>
   );

@@ -29,8 +29,8 @@ export const Footer = () => (
             Empowering youth across the GTA through music, <em>creativity</em>, and business.
           </SplitReveal>
           <Reveal className="mt-7 flex flex-wrap items-center gap-3">
-            <Button to="/referral" magnetic>Refer a Youth</Button>
-            <Button to="/programs" variant="secondary">Join a program</Button>
+            <Button to="/referral" magnetic className="w-full justify-center sm:w-auto">Refer a Youth</Button>
+            <Button to="/programs" variant="secondary" className="w-full justify-center sm:w-auto">Join a program</Button>
           </Reveal>
         </div>
 
@@ -58,7 +58,7 @@ export const Footer = () => (
 
       <Reveal className="mt-12 flex flex-col gap-4 text-sm text-grey md:mt-14 md:flex-row md:items-center md:justify-between">
         <nav aria-label="Footer">
-          <ul className="flex flex-wrap gap-x-6 gap-y-2">
+          <ul className="grid grid-cols-2 gap-x-6 gap-y-2 sm:flex sm:flex-wrap">
             {LINKS.map((l) => (
               <li key={l.to}><Link to={l.to} className={`${underline} transition-colors hover:text-fg`}>{l.label}</Link></li>
             ))}
