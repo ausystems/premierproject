@@ -14,7 +14,7 @@ import heroVideo720 from "@/assets/hero-video-720.mp4";
  *   orientation change can never alter the framing and the source is never swapped.
  * - Playback is suspended whenever the hero scrolls out of view or the tab is hidden.
  * - Honours prefers-reduced-motion: those visitors keep the still poster.
- * The copy layer on top is the redesign: one statement, one ask, the wordmark clipped by the fold.
+ * The copy layer is one statement and one ask, bottom-left.
  */
 const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -96,12 +96,12 @@ const Hero = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-ink/55 via-ink/10 to-transparent" />
       </div>
 
-      <div className="wrap relative z-10 flex min-h-[100svh] flex-col justify-end pb-[24vw] pt-nav-sm md:pb-[15vw] lg:pt-nav">
+      <div className="wrap relative z-10 flex min-h-[100svh] flex-col justify-end pb-14 pt-nav-sm md:pb-20 lg:pt-nav">
         <SplitReveal as="h1" trigger="load" delay={0.3} className="max-w-[18ch] text-display [text-shadow:0_2px_24px_rgba(0,0,0,0.45)]">
           Empowering Youth Through Music, <em>Creativity</em> & Business.
         </SplitReveal>
 
-        <div className="mt-10 grid gap-8 md:mt-14 md:grid-cols-12 md:items-end">
+        <div className="mt-10 grid gap-8 md:mt-12 md:grid-cols-12 md:items-end">
           <Reveal trigger="load" delay={0.9} className="md:col-span-6">
             <p className="max-w-[34ch] text-body text-fg2 [text-shadow:0_1px_12px_rgba(0,0,0,0.5)] md:text-[1.125rem]">
               A community where young creators, mentors, and innovators come together to build skills, share stories, and shape the future of the GTA.
@@ -110,16 +110,10 @@ const Hero = () => {
               <Button to="/programs" magnetic>Get Started</Button>
             </div>
           </Reveal>
-          <Reveal trigger="load" delay={1.1} className="meta text-grey md:col-span-6 md:justify-self-end md:text-right">
+          <Reveal trigger="load" delay={1.1} className="text-sm text-fg2 md:col-span-6 md:justify-self-end md:text-right">
             <span className="tnum text-fg">120+</span> young creators across the Greater Toronto Area
           </Reveal>
         </div>
-      </div>
-
-      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] select-none overflow-hidden leading-none">
-        <Reveal trigger="load" delay={0.7} y={40} className="translate-y-[30%] text-center font-sans text-wordmark-sm uppercase text-fg/95 md:text-wordmark">
-          Premier
-        </Reveal>
       </div>
     </section>
   );

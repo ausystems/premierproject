@@ -50,11 +50,11 @@ const fieldClass =
 type FieldProps = { id: keyof Values; label: string; error?: string; required?: boolean; children: ReactNode };
 const Field = ({ id, label, error, required, children }: FieldProps) => (
   <div>
-    <label htmlFor={id} className="meta block text-grey">
+    <label htmlFor={id} className="block text-sm text-grey">
       {label}{required && <span aria-hidden="true">{"\u00A0*"}</span>}
     </label>
     <div className={cn(error && "[&>*]:border-fg [&>*]:[box-shadow:0_1px_0_0_currentColor]")}>{children}</div>
-    <p id={`${id}-error`} role="alert" className={cn("meta mt-2 min-h-[1.3em] text-fg transition-opacity", error ? "opacity-100" : "opacity-0")}>
+    <p id={`${id}-error`} role="alert" className={cn("mt-2 min-h-[1.3em] text-sm text-fg transition-opacity", error ? "opacity-100" : "opacity-0")}>
       {error ? `! ${error}` : ""}
     </p>
   </div>
@@ -116,7 +116,7 @@ const Referral = () => {
         <section data-theme="paper" className="wrap grid gap-10 pt-[calc(theme(spacing.nav-sm)+3rem)] pb-section md:grid-cols-12 md:gap-8 lg:pt-[calc(theme(spacing.nav)+5rem)]">
           {/* Sticky step list */}
           <aside className="md:col-span-3 md:sticky md:top-32 md:self-start">
-            <div className="meta text-grey">Refer a Youth</div>
+            <div className="text-sm text-grey">Refer a Youth</div>
             {!sent && (
               <>
                 <div className="mt-6 h-px w-full bg-fg/15">
@@ -124,13 +124,12 @@ const Referral = () => {
                 </div>
                 <ol className="mt-6 hidden md:block">
                   {STEPS.map((s, i) => (
-                    <li key={s.index} className={cn("meta flex gap-4 py-2 transition-colors duration-250", i === active ? "text-fg" : "text-grey")}>
-                      <span className="tnum">{s.index}</span>
-                      <span>{s.title}</span>
+                    <li key={s.index} className={cn("py-1.5 text-sm transition-colors duration-250", i === active ? "text-fg" : "text-grey")}>
+                      {s.title}
                     </li>
                   ))}
                 </ol>
-                <p className="meta mt-6 text-grey md:hidden">Section {STEPS[active].index} of 05</p>
+                <p className="mt-4 text-sm text-grey md:hidden">{STEPS[active].title}</p>
               </>
             )}
           </aside>
@@ -162,8 +161,8 @@ const Referral = () => {
                 <form onSubmit={handleSubmit(onSubmit)} noValidate className="mt-20 md:mt-28">
                   {/* 01 */}
                   <fieldset ref={(n) => { if (n) steps.current[0] = n; }} data-step={0} className="hair-t py-12 md:py-16">
-                    <legend className="sr-only">01 Referring organization</legend>
-                    <div className="flex items-baseline gap-4"><span className="meta text-grey">01</span><span className="text-h3">Referring organization</span></div>
+                    <legend className="sr-only">Referring organization</legend>
+                    <h2 className="text-h3">Referring organization</h2>
                     <div className="mt-10 grid gap-10 md:grid-cols-2 md:gap-8">
                       <Field id="organizationName" label="Name of Referring Organization/Individual" required error={err("organizationName")}>
                         <input id="organizationName" {...register("organizationName")} className={fieldClass} placeholder="Enter organization or individual name" autoComplete="organization" aria-invalid={!!err("organizationName")} aria-describedby="organizationName-error" />
@@ -176,8 +175,8 @@ const Referral = () => {
 
                   {/* 02 */}
                   <fieldset ref={(n) => { if (n) steps.current[1] = n; }} data-step={1} className="hair-t py-12 md:py-16">
-                    <legend className="sr-only">02 Your contact details</legend>
-                    <div className="flex items-baseline gap-4"><span className="meta text-grey">02</span><span className="text-h3">Your contact details</span></div>
+                    <legend className="sr-only">Your contact details</legend>
+                    <h2 className="text-h3">Your contact details</h2>
                     <div className="mt-10 grid gap-10 md:grid-cols-2 md:gap-8">
                       <Field id="referralPhone" label="Referral Contact Phone Number" error={err("referralPhone")}>
                         <input id="referralPhone" type="tel" {...register("referralPhone")} className={fieldClass} placeholder="Enter phone number" autoComplete="tel" />
@@ -190,8 +189,8 @@ const Referral = () => {
 
                   {/* 03 */}
                   <fieldset ref={(n) => { if (n) steps.current[2] = n; }} data-step={2} className="hair-t py-12 md:py-16">
-                    <legend className="sr-only">03 About the youth</legend>
-                    <div className="flex items-baseline gap-4"><span className="meta text-grey">03</span><span className="text-h3">About the youth</span></div>
+                    <legend className="sr-only">About the youth</legend>
+                    <h2 className="text-h3">About the youth</h2>
                     <div className="mt-10 grid gap-10 md:grid-cols-2 md:gap-8">
                       <Field id="youthName" label="Youth's First and Last Name" required error={err("youthName")}>
                         <input id="youthName" {...register("youthName")} className={fieldClass} placeholder="Enter youth's full name" autoComplete="off" aria-invalid={!!err("youthName")} aria-describedby="youthName-error" />
@@ -207,10 +206,10 @@ const Referral = () => {
 
                   {/* 04 */}
                   <fieldset ref={(n) => { if (n) steps.current[3] = n; }} data-step={3} className="hair-t py-12 md:py-16">
-                    <legend className="sr-only">04 Reason for referral</legend>
-                    <div className="flex items-baseline gap-4"><span className="meta text-grey">04</span><span className="text-h3">Reason for referral</span></div>
+                    <legend className="sr-only">Reason for referral</legend>
+                    <h2 className="text-h3">Reason for referral</h2>
                     <div role="radiogroup" aria-labelledby="reason-label" aria-describedby="reasonForReferral-error" className="mt-10">
-                      <span id="reason-label" className="meta block text-grey">Reason for Referral<span aria-hidden="true">{"\u00A0*"}</span></span>
+                      <span id="reason-label" className="block text-sm text-grey">Reason for Referral<span aria-hidden="true">{"\u00A0*"}</span></span>
                       <div className="mt-4 hair-b">
                         {REASONS.map((r) => (
                           <label key={r} className="group flex cursor-pointer items-center justify-between gap-6 hair-t py-5 transition-colors duration-250 hover:text-fg2">
@@ -220,7 +219,7 @@ const Referral = () => {
                           </label>
                         ))}
                       </div>
-                      <p id="reasonForReferral-error" role="alert" className={cn("meta mt-3 min-h-[1.3em] text-fg", err("reasonForReferral") ? "opacity-100" : "opacity-0")}>
+                      <p id="reasonForReferral-error" role="alert" className={cn("mt-3 min-h-[1.3em] text-sm text-fg", err("reasonForReferral") ? "opacity-100" : "opacity-0")}>
                         {err("reasonForReferral") ? `! ${err("reasonForReferral")}` : ""}
                       </p>
                     </div>
@@ -235,8 +234,8 @@ const Referral = () => {
 
                   {/* 05 */}
                   <fieldset ref={(n) => { if (n) steps.current[4] = n; }} data-step={4} className="hair-t hair-b py-12 md:py-16">
-                    <legend className="sr-only">05 Notes and consent</legend>
-                    <div className="flex items-baseline gap-4"><span className="meta text-grey">05</span><span className="text-h3">Notes and consent</span></div>
+                    <legend className="sr-only">Notes and consent</legend>
+                    <h2 className="text-h3">Notes and consent</h2>
                     <div className="mt-10">
                       <Field id="additionalNotes" label="Additional Notes" error={err("additionalNotes")}>
                         <textarea id="additionalNotes" rows={4} {...register("additionalNotes")} className={cn(fieldClass, "resize-y")} placeholder="Please provide any additional information that may be helpful for program placement..." />
@@ -267,14 +266,13 @@ const Referral = () => {
             <Reveal className="mt-8 text-body text-fg2">
               By completing this form, you acknowledge and consent to the collection, use, and disclosure of the provided personal information for the following purposes:
             </Reveal>
-            <ol className="mt-8">
+            <ul className="mt-8">
               {PURPOSES.map((p, i) => (
-                <Reveal key={i} as="li" className="grid grid-cols-[3rem_minmax(0,1fr)] gap-x-4 hair-t py-5 text-body text-fg2 last:hair-b">
-                  <span className="meta pt-1 text-grey">0{i + 1}</span>
-                  <span>{p}</span>
+                <Reveal key={i} as="li" className="hair-t py-4 text-body text-fg2 last:hair-b">
+                  {p}
                 </Reveal>
               ))}
-            </ol>
+            </ul>
             <Reveal className="mt-8 text-body text-fg2">
               Personal information will not be shared with third parties without the individual's or their legal guardian's consent, except where required by law (e.g., in cases of risk of harm or legal obligations). All collected data will be stored securely and retained only for as long as necessary to fulfill program purposes or meet legal requirements.
             </Reveal>

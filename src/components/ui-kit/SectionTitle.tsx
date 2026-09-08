@@ -3,20 +3,16 @@ import { SplitReveal } from "@/components/motion/SplitReveal";
 import { cn } from "@/lib/utils";
 
 type Props = {
-  /** Mono index that sits at the LEFT of the title, never above it. */
-  index?: string;
   children: ReactNode;
   className?: string;
-  align?: "right" | "left";
+  /** Lower tier for compact sections (partners, contact) while keeping one heading style per level. */
+  size?: "h2" | "h3";
   id?: string;
 };
 
-/** The one section-heading style of the site: h2 ending in a period, index beside it on the baseline. */
-export const SectionTitle = ({ index, children, className, align = "right", id }: Props) => (
-  <div className={cn("flex items-end gap-6", align === "right" ? "justify-between" : "justify-start", className)}>
-    {index && <span className="meta pb-1.5 text-grey">{index}</span>}
-    <SplitReveal as="h2" id={id} className={cn("text-h2", align === "right" && "text-right")}>
-      {children}
-    </SplitReveal>
-  </div>
+/** The one section-heading style of the site: a sentence-case heading ending in a period. */
+export const SectionTitle = ({ children, className, size = "h2", id }: Props) => (
+  <SplitReveal as="h2" id={id} className={cn(size === "h2" ? "text-h2" : "text-h3", className)}>
+    {children}
+  </SplitReveal>
 );

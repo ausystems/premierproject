@@ -36,7 +36,7 @@ export default {
         card: { DEFAULT: "hsl(var(--card))", foreground: "hsl(var(--card-foreground))" },
       },
       fontSize: {
-        display: ["clamp(3.25rem, 9vw, 11rem)", { lineHeight: "0.92", letterSpacing: "-0.035em", fontWeight: "450" }],
+        display: ["clamp(2.75rem, 7vw, 8.5rem)", { lineHeight: "0.94", letterSpacing: "-0.035em", fontWeight: "450" }],
         h2: ["clamp(2rem, 4.2vw, 4.5rem)", { lineHeight: "1", letterSpacing: "-0.025em", fontWeight: "450" }],
         h3: ["clamp(1.5rem, 2.6vw, 2.75rem)", { lineHeight: "1.08", letterSpacing: "-0.02em", fontWeight: "450" }],
         h4: ["clamp(1.125rem, 1.4vw, 1.375rem)", { lineHeight: "1.25", letterSpacing: "-0.01em", fontWeight: "500" }],
@@ -48,9 +48,9 @@ export default {
         "wordmark-sm": ["24vw", { lineHeight: "0.8", letterSpacing: "-0.05em", fontWeight: "500" }],
       },
       spacing: {
-        section: "clamp(5rem, 11vw, 11rem)",
+        section: "clamp(4rem, 8vw, 8rem)",
         gutter: "clamp(1rem, 2.5vw, 2.5rem)",
-        nav: "5rem",
+        nav: "4rem",
         "nav-sm": "3.5rem",
       },
       maxWidth: { site: "1680px", prose: "40em", statement: "26ch" },

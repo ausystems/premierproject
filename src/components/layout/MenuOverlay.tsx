@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLenis } from "@/lib/SmoothScroll";
-import { useTorontoTime } from "@/hooks/useTorontoTime";
 
 const LINKS = [
   { to: "/", label: "Home" },
@@ -14,12 +13,11 @@ const LINKS = [
 
 type Props = { open: boolean; onClose: () => void };
 
-/** Full-screen ink menu. Five numbered links, the studio address and the live studio clock. */
+/** Full-screen ink menu: five links, nothing else. */
 export const MenuOverlay = ({ open, onClose }: Props) => {
   const root = useRef<HTMLDivElement>(null);
   const items = useRef<HTMLLIElement[]>([]);
   const lenis = useLenis();
-  const time = useTorontoTime();
   const mounted = useRef(false);
 
   useEffect(() => {
@@ -73,26 +71,19 @@ export const MenuOverlay = ({ open, onClose }: Props) => {
       data-theme="ink"
       data-lenis-prevent
       aria-hidden={!open}
-      className="fixed inset-0 z-40 flex flex-col justify-between overflow-y-auto pb-8 pt-nav-sm lg:pt-nav"
+      className="fixed inset-0 z-40 overflow-y-auto pt-nav-sm lg:pt-nav"
     >
-      <nav aria-label="Menu" className="wrap pt-8">
+      <nav aria-label="Menu" className="wrap pt-10">
         <ul className="flex flex-col">
           {LINKS.map((l, i) => (
-            <li key={l.to} ref={(n) => { if (n) items.current[i] = n; }} className="hair-t py-3 last:hair-b">
-              <Link to={l.to} onClick={onClose} className="group flex items-baseline gap-5">
-                <span className="meta w-8 text-grey">0{i + 1}</span>
-                <span className="text-[12vw] leading-[0.95] tracking-[-0.03em] transition-transform duration-300 ease-out group-hover:translate-x-2 sm:text-[9vw]">
-                  {l.label}
-                </span>
+            <li key={l.to} ref={(n) => { if (n) items.current[i] = n; }} className="overflow-hidden py-2">
+              <Link to={l.to} onClick={onClose} className="block text-[11vw] leading-[1.05] tracking-[-0.03em] transition-opacity duration-300 hover:opacity-60 sm:text-[8vw]">
+                {l.label}
               </Link>
             </li>
           ))}
         </ul>
       </nav>
-      <div className="wrap meta flex flex-wrap justify-between gap-4 text-grey">
-        <span>130 Queens Quay East, Toronto</span>
-        <span className="tnum">Toronto {time}</span>
-      </div>
     </div>
   );
 };

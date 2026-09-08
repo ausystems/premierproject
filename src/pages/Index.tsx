@@ -15,13 +15,7 @@ import trilliumLogo from "@/assets/ontario-trillium-logo.jpeg";
 const RowFollower = lazy(() => import("@/components/webgl/RowFollower").then((m) => ({ default: m.RowFollower })));
 
 const COMMUNITY = "/lovable-uploads/73b6ed2c-95da-4197-b8d2-ebefa8ca07ab.png";
-
-const PROGRAMS = [
-  { index: "01", title: "Music", meta: "Songwriting, production, performance" },
-  { index: "02", title: "Recording Arts", meta: "Professional studios" },
-  { index: "03", title: "Life Skills", meta: "Communication, time management, financial literacy" },
-  { index: "04", title: "Business Development", meta: "Entrepreneurship, branding, marketing" },
-];
+const PROGRAMS = ["Music", "Recording Arts", "Life Skills", "Business Development"];
 
 const QUOTES = [
   "Project Premier changed my life. I went from feeling lost to having a real plan for my future. Now, I'm in the studio, learning from real professionals and building a career in music. I finally feel like I have a purpose. This program gave me a second chance that no one else would!",
@@ -30,10 +24,10 @@ const QUOTES = [
 ];
 
 const CHANNELS = [
-  { label: "Email", node: <a href="mailto:info@projectpremier.org" className="hover:text-fg transition-colors">info@projectpremier.org</a> },
-  { label: "Instagram", node: <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="hover:text-fg transition-colors">@projectpremierx</a> },
-  { label: "Address", node: <>130 Queens Quay East,<br />Toronto, ON, Canada</> },
-  { label: "Hours", node: <>Friday: 5 PM to 9 PM<br />Saturday: 12 PM to 5 PM<br />Sunday to Thursday: Closed</> },
+  { label: "Email", node: <a href="mailto:info@projectpremier.org" className="transition-colors hover:text-fg">info@projectpremier.org</a> },
+  { label: "Instagram", node: <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-fg">@projectpremierx</a> },
+  { label: "Address", node: <>130 Queens Quay East<br />Toronto, ON, Canada</> },
+  { label: "Hours", node: <>Friday 5 PM to 9 PM<br />Saturday 12 PM to 5 PM<br />Sunday to Thursday closed</> },
 ];
 
 const Index = () => {
@@ -44,37 +38,36 @@ const Index = () => {
       <main>
         <Hero />
 
-        {/* 01 Statement */}
+        {/* Statement */}
         <section data-theme="paper" className="wrap py-section">
           <div className="grid gap-12 md:grid-cols-12 md:gap-8">
             <div className="md:col-span-7">
-              <span className="meta text-grey">01</span>
-              <InkWords className="mt-6 max-w-[28ch] text-statement">
+              <InkWords className="max-w-[28ch] text-statement">
                 At Project Premier, we are committed to transforming the lives of marginalized youth across the Greater Toronto Area (GTA) by providing them with the tools, mentorship, and opportunities they need to succeed. Through the power of music, creativity, and business education, we equip young individuals with essential skills, real-world experience, and a supportive community that fosters growth.
               </InkWords>
               <Reveal className="mt-10">
                 <Button variant="link" to="/about">About Us</Button>
               </Reveal>
             </div>
-            <div className="md:col-span-4 md:col-start-9 md:mt-32">
+            <div className="md:col-span-4 md:col-start-9 md:mt-24">
               <ImageReveal src={COMMUNITY} alt="Project Premier community" aspect="4 / 5" width={1080} height={1350} sizes="(min-width: 768px) 33vw, 100vw" />
             </div>
           </div>
         </section>
 
-        {/* 02 Programs */}
+        {/* Programs */}
         <section data-theme="paper" className="wrap pb-section">
-          <SectionTitle index="02">Our Programs.</SectionTitle>
-          <Reveal className="mt-8 max-w-prose text-body text-fg2 md:mt-12">
-            Four pillars built to develop the next generation of creators, professionals, and leaders.
-          </Reveal>
-          <div className="mt-12 md:mt-16">
-            {PROGRAMS.map((p, i) => (
+          <div className="grid gap-8 md:grid-cols-12 md:items-end">
+            <SectionTitle className="md:col-span-6">Our Programs.</SectionTitle>
+            <Reveal className="text-body text-fg2 md:col-span-5 md:col-start-8">
+              Four pillars built to develop the next generation of creators, professionals, and leaders.
+            </Reveal>
+          </div>
+          <div className="mt-12 md:mt-14">
+            {PROGRAMS.map((title, i) => (
               <IndexRow
-                key={p.title}
-                index={p.index}
-                title={p.title}
-                meta={p.meta}
+                key={title}
+                title={title}
                 to="/programs"
                 onEnter={() => setActive(i)}
                 onLeave={() => setActive(null)}
@@ -90,17 +83,17 @@ const Index = () => {
           </Suspense>
         </section>
 
-        {/* 03 Voices: the story film, then the three quotes set as one and two, never three equal blocks */}
-        <section data-theme="ink" className="py-section">
-          <div className="wrap">
-            <SectionTitle index="03">What Our Youth Say.</SectionTitle>
-            <Reveal className="mt-8 max-w-prose text-body text-fg2 md:mt-12">
+        {/* Voices */}
+        <section data-theme="ink" className="wrap py-section">
+          <div className="grid gap-8 md:grid-cols-12 md:items-end">
+            <SectionTitle className="md:col-span-6">What Our Youth Say.</SectionTitle>
+            <Reveal className="text-body text-fg2 md:col-span-5 md:col-start-8">
               Real stories from the young creators building their future with Project Premier.
             </Reveal>
           </div>
 
-          <Reveal className="mt-14 md:mt-20">
-            <div className="relative aspect-video w-full hair-t hair-b">
+          <Reveal className="mt-12 md:mt-14">
+            <div className="relative aspect-video w-full md:w-8/12">
               <iframe
                 className="absolute inset-0 h-full w-full"
                 src="https://www.youtube.com/embed/2z-Ztm9UHr4"
@@ -110,61 +103,58 @@ const Index = () => {
                 allowFullScreen
               />
             </div>
-            <div className="wrap meta flex flex-wrap justify-between gap-4 py-4 text-grey">
-              <span>Discover How We Empower Youth</span>
-              <span className="max-w-[48ch] text-right">See the program in action. Real students, real mentorship, and the moments that change trajectories.</span>
-            </div>
           </Reveal>
 
-          <div className="wrap mt-16 grid gap-14 md:mt-24 md:grid-cols-12 md:gap-8">
+          <div className="mt-16 grid gap-12 md:mt-20 md:grid-cols-12 md:gap-8">
             <figure className="md:col-span-7">
-              <SplitReveal as="blockquote" className="max-w-[30ch] text-statement">
-                {QUOTES[0]}
-              </SplitReveal>
-              <figcaption className="meta mt-6 text-grey">Youth Voice</figcaption>
+              <SplitReveal as="blockquote" className="max-w-[30ch] text-statement">{QUOTES[0]}</SplitReveal>
+              <figcaption className="mt-5 text-sm text-grey">Youth Voice</figcaption>
             </figure>
             <div className="md:col-span-4 md:col-start-9">
               {QUOTES.slice(1).map((q, i) => (
-                <Reveal key={i} as="figure" className="hair-t py-8 first:pt-0 first:border-t-0 md:first:pt-0">
+                <Reveal key={i} as="figure" className={i === 0 ? "" : "mt-10"}>
                   <blockquote className="text-h4 font-normal text-fg2">{q}</blockquote>
-                  <figcaption className="meta mt-5 text-grey">Youth Voice</figcaption>
+                  <figcaption className="mt-4 text-sm text-grey">Youth Voice</figcaption>
                 </Reveal>
               ))}
             </div>
           </div>
         </section>
 
-        {/* 04 Partners */}
-        <section data-theme="paper" className="wrap py-section">
-          <SectionTitle index="04">Partners & Collaborators.</SectionTitle>
-          <Reveal className="mt-12 grid items-center gap-8 hair-t hair-b py-10 md:mt-16 md:grid-cols-12">
-            <p className="max-w-[34ch] text-body text-fg2 md:col-span-5">
-              We're proud to work alongside these organizations to create meaningful impact in our community.
-            </p>
-            <div className="flex flex-wrap items-center gap-10 md:col-span-7 md:justify-end md:gap-16">
-              <img src={remixLogo} alt="The Remix Project logo" width={640} height={335} loading="lazy" className="still h-14 w-auto md:h-20" />
-              <img src={trilliumLogo} alt="Ontario Trillium Foundation logo" width={1180} height={664} loading="lazy" className="still h-14 w-auto md:h-20" />
+        {/* Partners and Get in touch: compact, together */}
+        <section data-theme="paper" className="wrap py-[clamp(3.5rem,6vw,6rem)]">
+          <Reveal className="grid items-center gap-8 md:grid-cols-12">
+            <div className="md:col-span-5">
+              <h2 className="text-h3">Partners & Collaborators.</h2>
+              <p className="mt-3 max-w-[34ch] text-body text-fg2">
+                We're proud to work alongside these organizations to create meaningful impact in our community.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-10 md:col-span-6 md:col-start-7 md:justify-end md:gap-14">
+              <img src={remixLogo} alt="The Remix Project logo" width={640} height={335} loading="lazy" className="still h-12 w-auto md:h-14" />
+              <img src={trilliumLogo} alt="Ontario Trillium Foundation logo" width={1180} height={664} loading="lazy" className="still h-12 w-auto md:h-14" />
             </div>
           </Reveal>
-        </section>
 
-        {/* 05 Get in touch */}
-        <section data-theme="paper" className="wrap pb-section">
-          <SectionTitle index="05">Get In Touch.</SectionTitle>
-          <Reveal className="mt-8 max-w-prose text-body text-fg2 md:mt-12">
-            Questions, partnerships, or just saying hi. We'd love to hear from you.
-          </Reveal>
-          <Reveal className="mt-12 grid grid-cols-2 hair-t hair-b md:mt-16 md:grid-cols-4">
-            {CHANNELS.map((c, i) => (
-              <div key={c.label} className={`py-8 pr-6 ${i > 0 ? "md:hair-l md:pl-8" : ""} ${i % 2 === 1 ? "hair-l pl-6 md:pl-8" : ""} ${i > 1 ? "hair-t md:border-t-0" : ""}`}>
-                <div className="meta text-grey">{c.label}</div>
-                <div className="mt-4 text-body text-fg2">{c.node}</div>
-              </div>
-            ))}
-          </Reveal>
-          <Reveal className="mt-12">
-            <Button href="mailto:info@projectpremier.org">Send Us A Message</Button>
-          </Reveal>
+          <div className="mt-20 grid gap-8 md:mt-24 md:grid-cols-12">
+            <div className="md:col-span-5">
+              <SectionTitle size="h3">Get In Touch.</SectionTitle>
+              <Reveal className="mt-3 max-w-[34ch] text-body text-fg2">
+                Questions, partnerships, or just saying hi. We'd love to hear from you.
+              </Reveal>
+              <Reveal className="mt-8">
+                <Button href="mailto:info@projectpremier.org">Send Us A Message</Button>
+              </Reveal>
+            </div>
+            <Reveal className="grid gap-x-8 gap-y-8 sm:grid-cols-2 md:col-span-6 md:col-start-7">
+              {CHANNELS.map((c) => (
+                <div key={c.label}>
+                  <div className="text-sm text-grey">{c.label}</div>
+                  <div className="mt-1.5 text-body text-fg2">{c.node}</div>
+                </div>
+              ))}
+            </Reveal>
+          </div>
         </section>
       </main>
       <Footer />
