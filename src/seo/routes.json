@@ -1,0 +1,51 @@
+{
+  "/": {
+    "name": "Home",
+    "title": "",
+    "description": "Project Premier is committed to transforming the lives of marginalized youth across the Greater Toronto Area (GTA) through music, creativity, and business education.",
+    "type": "WebPage",
+    "priority": "1.0"
+  },
+  "/about": {
+    "name": "About Us",
+    "title": "About Us",
+    "description": "A community-driven movement transforming the lives of marginalized youth across the Greater Toronto Area through music, creativity, and business. Our vision rests on growth, reform, and connectivity.",
+    "type": "AboutPage",
+    "priority": "0.8"
+  },
+  "/programs": {
+    "name": "Our Programs",
+    "title": "Our Programs",
+    "description": "Four hands-on programs for youth across the Greater Toronto Area: Music, Recording Arts, Life Skills, and Business Development. Immersive programs that turn passion into a sustainable career.",
+    "type": "CollectionPage",
+    "priority": "0.9"
+  },
+  "/contact": {
+    "name": "Contact",
+    "title": "Contact",
+    "description": "Reach Project Premier at info@projectpremier.org or visit our studio at 130 Queens Quay East on the Toronto waterfront. Open Friday 5 PM to 9 PM and Saturday 12 PM to 5 PM.",
+    "type": "ContactPage",
+    "priority": "0.7"
+  },
+  "/referral": {
+    "name": "Refer a Youth",
+    "title": "Refer a Youth",
+    "description": "Refer a young person to Project Premier's programs through our secure referral form. Your referral can make a meaningful difference in a young person's life.",
+    "type": "WebPage",
+    "priority": "0.9"
+  },
+  "/privacy": {
+    "name": "Privacy Policy",
+    "title": "Privacy Policy",
+    "description": "How Project Premier collects, uses, stores and protects personal information, including information submitted through the youth referral form, in accordance with PIPEDA and, where applicable, FIPPA.",
+    "type": "WebPage",
+    "priority": "0.3"
+  },
+  "/terms": {
+    "name": "Terms of Use",
+    "title": "Terms of Use",
+    "description": "The terms that apply to your use of the Project Premier website, including referrals and submissions, intellectual property, third-party content and limitations of liability.",
+    "type": "WebPage",
+    "priority": "0.3"
+  }
+}

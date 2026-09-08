@@ -5,7 +5,7 @@ import { MenuOverlay } from "@/components/layout/MenuOverlay";
 import { cn } from "@/lib/utils";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
-const LOGO = "/lovable-uploads/58c29542-568b-4ddb-898d-7f3c77b14af4.png";
+const LOGO = "/logo-nav.png";
 
 const LINKS = [
   { to: "/about", label: "About" },
@@ -34,7 +34,7 @@ export const Nav = () => {
       <header ref={bar} data-theme="ink" className="fixed inset-x-0 top-0 z-50 bg-ink text-paper">
         <nav aria-label="Primary" className="wrap flex h-nav-sm items-center justify-between lg:h-nav">
           <Link to="/" className="relative z-[60] flex items-center" aria-label="Project Premier, home">
-            <img src={LOGO} alt="Project Premier" width={120} height={80} className="h-12 w-auto lg:h-16" decoding="async" />
+            <img src={LOGO} alt="Project Premier" width={384} height={256} className="h-12 w-auto lg:h-16" decoding="async" />
           </Link>
 
           <div className="hidden items-center gap-10 lg:flex">

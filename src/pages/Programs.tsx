@@ -14,15 +14,11 @@ const PROGRAMS = [
 ];
 
 const Programs = () => {
-  useSeo({
-    title: "Our Programs",
-    path: "/programs",
-    description: "Four hands-on programs for youth across the Greater Toronto Area: Music, Recording Arts, Life Skills, and Business Development. Immersive programs that turn passion into a sustainable career.",
-  });
+  useSeo("/programs");
 
   return (
     <>
-      <main>
+      <main id="main">
         <section data-theme="ink" className="wrap flex min-h-[64svh] flex-col justify-end pb-14 pt-[calc(theme(spacing.nav-sm)+3rem)] md:pb-20 lg:pt-[calc(theme(spacing.nav)+4rem)]">
           <SplitReveal as="h1" trigger="load" delay={0.2} className="max-w-[14ch] text-display">
             Hands-on programs that <em>shape</em> careers.

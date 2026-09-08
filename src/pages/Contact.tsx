@@ -7,7 +7,7 @@ import { ImageReveal } from "@/components/motion/ImageReveal";
 import { useSeo } from "@/lib/seo";
 
 const EMAIL = "info@projectpremier.org";
-const MAP = "/lovable-uploads/49dfc3cf-39fa-42c9-b75f-0d3ff5743c90.png";
+const MAP = "/map.webp";
 const MAPS_URL = "https://maps.google.com/?q=130+Queens+Quay+East,+Toronto,+ON,+Canada";
 
 const CHANNELS = [
@@ -19,11 +19,7 @@ const CHANNELS = [
 
 const Contact = () => {
   const [copied, setCopied] = useState(false);
-  useSeo({
-    title: "Contact",
-    path: "/contact",
-    description: "Reach Project Premier at info@projectpremier.org or visit our studio at 130 Queens Quay East on the Toronto waterfront. Open Friday 5 PM to 9 PM and Saturday 12 PM to 5 PM.",
-  });
+  useSeo("/contact");
 
   useEffect(() => {
     if (!copied) return;
@@ -42,7 +38,7 @@ const Contact = () => {
 
   return (
     <>
-      <main>
+      <main id="main">
         {/* The address is the headline */}
         <section data-theme="paper" className="wrap pt-[calc(theme(spacing.nav-sm)+3rem)] pb-section lg:pt-[calc(theme(spacing.nav)+5rem)]">
           <h1>

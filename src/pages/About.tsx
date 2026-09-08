@@ -10,7 +10,7 @@ import { useSeo } from "@/lib/seo";
 import remixLogo from "@/assets/remix-project-logo.jpeg";
 import trilliumLogo from "@/assets/ontario-trillium-logo.jpeg";
 
-const COMMUNITY = "/lovable-uploads/73b6ed2c-95da-4197-b8d2-ebefa8ca07ab.png";
+const COMMUNITY = "/community.webp";
 
 // Five rows, never three.
 const ROWS = [
@@ -42,15 +42,11 @@ const ScrollPortrait = () => {
 };
 
 const About = () => {
-  useSeo({
-    title: "About Us",
-    path: "/about",
-    description: "A community-driven movement transforming the lives of marginalized youth across the Greater Toronto Area through music, creativity, and business.",
-  });
+  useSeo("/about");
 
   return (
     <>
-      <main>
+      <main id="main">
         <section data-theme="paper" className="wrap grid gap-10 pt-[calc(theme(spacing.nav-sm)+3rem)] pb-section md:grid-cols-12 lg:pt-[calc(theme(spacing.nav)+5rem)]">
           <div className="md:col-span-8 md:col-start-4">
             <SplitReveal as="h1" trigger="load" delay={0.2} className="max-w-[14ch] text-display">

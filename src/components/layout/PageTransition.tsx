@@ -1,21 +1,20 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import { Routes, useLocation, type Location } from "react-router-dom";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 import { useLenis } from "@/lib/SmoothScroll";
 
-const WORD = "PREMIER";
-const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const LOGO = "/logo-nav.png";
 
 /**
- * The one signature transition. An ink curtain rises over the old page, the wordmark shuffles
- * while the route swaps and scroll resets underneath, then the curtain lifts off the top.
- * Routes are rendered against a frozen location so the old page stays put until it is covered.
+ * The one signature transition. An ink curtain rises over the old page, the Project Premier logo
+ * settles in while the route swaps and scroll resets underneath, then the curtain lifts off the top.
+ * Routes render against a frozen location so the old page stays put until it is covered.
  */
 export const PageTransition = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
   const [shown, setShown] = useState<Location>(location);
   const curtain = useRef<HTMLDivElement>(null);
-  const word = useRef<HTMLSpanElement>(null);
+  const logo = useRef<HTMLImageElement>(null);
   const lenis = useLenis();
   const busy = useRef(false);
 
@@ -25,8 +24,8 @@ export const PageTransition = ({ children }: { children: ReactNode }) => {
       return;
     }
     const el = curtain.current;
-    const w = word.current;
-    if (!el || !w) { setShown(location); return; }
+    const mark = logo.current;
+    if (!el || !mark) { setShown(location); return; }
 
     const resetScroll = () => {
       if (lenis) lenis.scrollTo(0, { immediate: true, force: true });
@@ -44,7 +43,6 @@ export const PageTransition = ({ children }: { children: ReactNode }) => {
     busy.current = true;
     lenis?.stop();
 
-    let shuffle = 0;
     const tl = gsap.timeline({
       onComplete: () => {
         busy.current = false;
@@ -54,38 +52,30 @@ export const PageTransition = ({ children }: { children: ReactNode }) => {
     });
 
     tl.set(el, { pointerEvents: "auto" })
+      .set(mark, { autoAlpha: 0, scale: 0.94 })
       .fromTo(el, { clipPath: "inset(100% 0 0 0)" }, { clipPath: "inset(0% 0 0 0)", duration: 0.7, ease: "power2.inOut" })
-      .add(() => {
-        setShown(location);
-        resetScroll();
-        let frame = 0;
-        shuffle = window.setInterval(() => {
-          frame += 1;
-          w.textContent = WORD.split("")
-            .map((c, i) => (frame > 6 + i ? c : GLYPHS[Math.floor(Math.random() * GLYPHS.length)]))
-            .join("");
-          if (frame > 14) { window.clearInterval(shuffle); w.textContent = WORD; }
-        }, 40);
-      })
-      .to({}, { duration: 0.45 })
-      .to(el, { clipPath: "inset(0 0 100% 0)", duration: 0.7, ease: "power2.inOut" })
+      .to(mark, { autoAlpha: 1, scale: 1, duration: 0.45, ease: "power3.out" }, "-=0.25")
+      .add(() => { setShown(location); resetScroll(); })
+      .to({}, { duration: 0.3 })
+      .to(mark, { autoAlpha: 0, duration: 0.25, ease: "power2.in" })
+      .to(el, { clipPath: "inset(0 0 100% 0)", duration: 0.7, ease: "power2.inOut" }, "-=0.1")
       .set(el, { pointerEvents: "none", clipPath: "inset(100% 0 0 0)" });
 
-    return () => { window.clearInterval(shuffle); };
+    return () => { tl.kill(); };
   }, [location, shown, lenis]);
 
   return (
     <>
-      <Routes location={shown}>{children}</Routes>
+      <Suspense fallback={null}>
+        <Routes location={shown}>{children}</Routes>
+      </Suspense>
       <div
         ref={curtain}
         aria-hidden="true"
         data-theme="ink"
         className="pointer-events-none fixed inset-0 z-[70] flex items-center justify-center [clip-path:inset(100%_0_0_0)]"
       >
-        <span ref={word} className="font-sans text-[14vw] uppercase leading-none tracking-[-0.05em] md:text-[10vw]">
-          {WORD}
-        </span>
+        <img ref={logo} src={LOGO} alt="" width={384} height={256} decoding="async" className="h-16 w-auto opacity-0 md:h-24" />
       </div>
     </>
   );

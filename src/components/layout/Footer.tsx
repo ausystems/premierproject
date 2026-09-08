@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Instagram, Mail } from "lucide-react";
 import { Button } from "@/components/ui-kit/Button";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
@@ -8,53 +9,65 @@ const LINKS = [
   { to: "/about", label: "About" },
   { to: "/programs", label: "Programs" },
   { to: "/contact", label: "Contact" },
+  { to: "/privacy", label: "Privacy" },
+  { to: "/terms", label: "Terms" },
 ];
 
-const link =
-  "relative after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100";
+const underline =
+  "relative after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100";
 
-/** Ink footer: the statement, the two asks, one row of links, one row of facts. */
+/**
+ * Compact ink footer built to convert: the statement and the two asks on the left, the ways to
+ * reach us (with icons) on the right, then one row of links and the copyright.
+ */
 export const Footer = () => (
   <footer data-theme="ink">
-    <div className="wrap py-section">
-      <SplitReveal as="p" className="max-w-[24ch] text-h2">
-        Empowering youth across the GTA through music, <em>creativity</em>, and business.
-      </SplitReveal>
+    <div className="wrap py-[clamp(3rem,6vw,5.5rem)]">
+      <div className="grid gap-10 md:grid-cols-12 md:items-end md:gap-8">
+        <div className="md:col-span-7">
+          <SplitReveal as="p" className="max-w-[26ch] text-h3">
+            Empowering youth across the GTA through music, <em>creativity</em>, and business.
+          </SplitReveal>
+          <Reveal className="mt-7 flex flex-wrap items-center gap-3">
+            <Button to="/referral" magnetic>Refer a Youth</Button>
+            <Button to="/programs" variant="secondary">Join a program</Button>
+          </Reveal>
+        </div>
 
-      <Reveal className="mt-10 flex flex-wrap items-center gap-4">
-        <Button to="/referral" magnetic>Refer a Youth</Button>
-        <Button to="/programs" variant="secondary">Join a program</Button>
-      </Reveal>
-
-      <Reveal className="mt-20 grid gap-10 text-ui md:mt-28 md:grid-cols-12">
-        <nav aria-label="Footer" className="md:col-span-5">
-          <ul className="flex flex-wrap gap-x-8 gap-y-3">
-            {LINKS.map((l) => (
-              <li key={l.to}><Link to={l.to} className={link}>{l.label}</Link></li>
-            ))}
+        <Reveal as="address" className="not-italic md:col-span-4 md:col-start-9">
+          <ul className="space-y-3 text-ui">
             <li>
-              <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className={link}>Instagram</a>
+              <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-3">
+                <Instagram aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
+                <span className={underline}>@projectpremierx</span>
+              </a>
+            </li>
+            <li>
+              <a href="mailto:info@projectpremier.org" className="group inline-flex items-center gap-3">
+                <Mail aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
+                <span className={underline}>info@projectpremier.org</span>
+              </a>
             </li>
           </ul>
-        </nav>
-        <dl className="grid gap-x-8 gap-y-6 text-sm text-fg2 sm:grid-cols-2 md:col-span-7">
-          <div>
-            <dt className="sr-only">Studio</dt>
-            <dd>130 Queens Quay East, Toronto, ON, Canada<br />Friday 5 PM to 9 PM. Saturday 12 PM to 5 PM.</dd>
-          </div>
-          <div>
-            <dt className="sr-only">Contact</dt>
-            <dd>
-              <a href="mailto:info@projectpremier.org" className="transition-colors hover:text-fg">info@projectpremier.org</a><br />
-              <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-fg">@projectpremierx</a>
-            </dd>
-          </div>
-        </dl>
-      </Reveal>
+          <p className="mt-5 text-sm text-fg2">
+            130 Queens Quay East, Toronto, ON, Canada<br />
+            Friday 5 PM to 9 PM. Saturday 12 PM to 5 PM.
+          </p>
+        </Reveal>
+      </div>
 
-      <Reveal as="p" className="mt-14 text-sm text-grey">
-        © Copyright 2026. Project Premier. All Rights Reserved. Built by{" "}
-        <a href="https://www.audesigns.co/" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-fg">AuDesigns.co</a>
+      <Reveal className="mt-12 flex flex-col gap-4 text-sm text-grey md:mt-14 md:flex-row md:items-center md:justify-between">
+        <nav aria-label="Footer">
+          <ul className="flex flex-wrap gap-x-6 gap-y-2">
+            {LINKS.map((l) => (
+              <li key={l.to}><Link to={l.to} className={`${underline} transition-colors hover:text-fg`}>{l.label}</Link></li>
+            ))}
+          </ul>
+        </nav>
+        <p>
+          © Copyright 2026. Project Premier. All Rights Reserved. Built by{" "}
+          <a href="https://www.skyboundscaling.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-fg">Skybound Scaling</a>
+        </p>
       </Reveal>
     </div>
   </footer>

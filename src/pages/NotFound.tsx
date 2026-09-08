@@ -10,7 +10,7 @@ const DIGITS = "0123456789";
 const NotFound = () => {
   const location = useLocation();
   const digits = useRef<HTMLSpanElement>(null);
-  useSeo({ title: "Page not found", path: location.pathname, description: "The page you were looking for does not exist.", noindex: true });
+  useSeo(location.pathname);
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
@@ -30,7 +30,7 @@ const NotFound = () => {
   }, []);
 
   return (
-    <main data-theme="ink" className="wrap flex min-h-[100svh] flex-col justify-center pb-16 pt-nav-sm lg:pt-nav">
+    <main id="main" data-theme="ink" className="wrap flex min-h-[100svh] flex-col justify-center pb-16 pt-nav-sm lg:pt-nav">
       <h1 className="tnum text-[24vw] font-[450] leading-none tracking-[-0.05em] md:text-[16vw]">
         <span ref={digits}>404</span>
       </h1>

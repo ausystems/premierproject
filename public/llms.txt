@@ -1,0 +1,30 @@
+# Project Premier
+
+> Project Premier is a Toronto nonprofit committed to transforming the lives of marginalized youth across the Greater Toronto Area (GTA) by providing them with the tools, mentorship, and opportunities they need to succeed, through music, creativity, and business education.
+
+Studio: 130 Queens Quay East, Toronto, ON, Canada (the Toronto waterfront).
+Hours: Friday 5 PM to 9 PM. Saturday 12 PM to 5 PM. Sunday to Thursday closed.
+Email: info@projectpremier.org
+Instagram: https://www.instagram.com/projectpremierx/
+
+## Pages
+
+- [Home](https://premierproject.vercel.app/): Empowering Youth Through Music, Creativity & Business. A community where young creators, mentors, and innovators come together to build skills, share stories, and shape the future of the GTA.
+- [About Us](https://premierproject.vercel.app/about): Built for the next generation of creators. Our vision rests on growth, reform, and connectivity.
+- [Our Programs](https://premierproject.vercel.app/programs): Four focused programs, Music, Recording Arts, Life Skills, and Business Development, built to develop the next generation of creators, professionals, and leaders.
+- [Contact](https://premierproject.vercel.app/contact): Email, Instagram, studio address and hours. We typically respond within one to two business days.
+- [Refer a Youth](https://premierproject.vercel.app/referral): A secure referral form for organizations and individuals connecting a young person to our programs.
+- [Privacy Policy](https://premierproject.vercel.app/privacy): How personal information is collected, used, stored and protected, in accordance with PIPEDA and, where applicable, FIPPA.
+- [Terms of Use](https://premierproject.vercel.app/terms): Terms that apply to use of this website.
+
+## Programs
+
+- Music: Explore the power of music as a tool for expression and personal growth. Learn songwriting, production, and performance techniques.
+- Recording Arts: Hands-on experience in professional studios with top producers and engineers.
+- Life Skills: Build essential skills in communication, time management, and financial literacy to navigate life successfully.
+- Business Development: Gain knowledge in entrepreneurship, branding, marketing, and financial management to build a sustainable career.
+
+## Partners
+
+- The Remix Project
+- Ontario Trillium Foundation

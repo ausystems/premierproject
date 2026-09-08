@@ -65,11 +65,7 @@ const Section = ({ title, children }: { title: string; children: ReactNode }) =>
 const Referral = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
-  useSeo({
-    title: "Refer a Youth",
-    path: "/referral",
-    description: "Refer a young person to Project Premier's programs through our secure referral form. Your referral can make a meaningful difference in a young person's life.",
-  });
+  useSeo("/referral");
 
   const form = useForm<Values>({
     resolver: zodResolver(formSchema),
@@ -105,7 +101,7 @@ const Referral = () => {
 
   return (
     <>
-      <main>
+      <main id="main">
         <section data-theme="paper" className="wrap pt-[calc(theme(spacing.nav-sm)+3rem)] pb-section lg:pt-[calc(theme(spacing.nav)+5rem)]">
           <div className="mx-auto max-w-[46rem]">
             {sent ? (

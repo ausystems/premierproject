@@ -3,7 +3,7 @@ import { Button } from "@/components/ui-kit/Button";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
 import { cn } from "@/lib/utils";
-import heroPoster from "@/assets/hero-poster.jpg";
+const heroPoster = "/hero-poster.jpg";
 import heroVideo1080 from "@/assets/hero-video-1080.mp4";
 import heroVideo720 from "@/assets/hero-video-720.mp4";
 

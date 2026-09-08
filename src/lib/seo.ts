@@ -1,16 +1,16 @@
 import { useEffect } from "react";
+import routes from "@/seo/routes.json";
+import { buildLd, pageTitle, SITE_URL } from "@/seo/ld";
 
-export const SITE_URL = "https://premierproject.vercel.app";
-export const SITE_NAME = "Project Premier";
-const HOME_TITLE = "Project Premier - Empowering Youth, Changing the Future";
+type Route = { name: string; title: string; description: string; type: string; priority: string };
+const ROUTES = routes as Record<string, Route>;
 
-type Seo = {
-  /** Page title without the site name; the home page keeps its full brand title. */
-  title?: string;
-  description: string;
-  /** Route path, e.g. "/about". */
-  path: string;
-  noindex?: boolean;
+const NOT_FOUND: Route = {
+  name: "Page not found",
+  title: "Page not found",
+  description: "The page you were looking for does not exist.",
+  type: "WebPage",
+  priority: "0",
 };
 
 const upsertMeta = (attr: "name" | "property", key: string, content: string) => {
@@ -33,19 +33,35 @@ const upsertLink = (rel: string, href: string) => {
   el.setAttribute("href", href);
 };
 
-/** Per-route document metadata: title, description, canonical, Open Graph and Twitter fields. */
-export const useSeo = ({ title, description, path, noindex = false }: Seo) => {
+/**
+ * Per-route document metadata and structured data, kept in step with the static shells that
+ * scripts/postbuild.mjs writes from the same routes.json and JSON-LD builder.
+ * Unknown paths (the 404 page) are marked noindex.
+ */
+export const useSeo = (path: string) => {
   useEffect(() => {
-    const fullTitle = title ? `${title} | ${SITE_NAME}` : HOME_TITLE;
+    const known = Object.prototype.hasOwnProperty.call(ROUTES, path);
+    const route = known ? ROUTES[path] : NOT_FOUND;
+    const title = pageTitle(route);
     const url = `${SITE_URL}${path}`;
-    document.title = fullTitle;
-    upsertMeta("name", "description", description);
-    upsertMeta("name", "robots", noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large");
-    upsertMeta("property", "og:title", fullTitle);
-    upsertMeta("property", "og:description", description);
+
+    document.title = title;
+    upsertMeta("name", "description", route.description);
+    upsertMeta("name", "robots", known ? "index, follow, max-image-preview:large" : "noindex, nofollow");
+    upsertMeta("property", "og:title", title);
+    upsertMeta("property", "og:description", route.description);
     upsertMeta("property", "og:url", url);
-    upsertMeta("name", "twitter:title", fullTitle);
-    upsertMeta("name", "twitter:description", description);
+    upsertMeta("name", "twitter:title", title);
+    upsertMeta("name", "twitter:description", route.description);
     upsertLink("canonical", url);
-  }, [title, description, path, noindex]);
+
+    let ld = document.getElementById("ld-route") as HTMLScriptElement | null;
+    if (!ld) {
+      ld = document.createElement("script");
+      ld.type = "application/ld+json";
+      ld.id = "ld-route";
+      document.head.appendChild(ld);
+    }
+    ld.textContent = known ? JSON.stringify(buildLd(path, route)) : "";
+  }, [path]);
 };

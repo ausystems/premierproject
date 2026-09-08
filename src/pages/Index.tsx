@@ -9,13 +9,13 @@ import { ImageReveal } from "@/components/motion/ImageReveal";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { useSeo } from "@/lib/seo";
-import heroPoster from "@/assets/hero-poster.jpg";
+const heroPoster = "/hero-poster.jpg";
 import remixLogo from "@/assets/remix-project-logo.jpeg";
 import trilliumLogo from "@/assets/ontario-trillium-logo.jpeg";
 
 const RowFollower = lazy(() => import("@/components/webgl/RowFollower").then((m) => ({ default: m.RowFollower })));
 
-const COMMUNITY = "/lovable-uploads/73b6ed2c-95da-4197-b8d2-ebefa8ca07ab.png";
+const COMMUNITY = "/community.webp";
 const PROGRAMS = ["Music", "Recording Arts", "Life Skills", "Business Development"];
 
 const QUOTES = [
@@ -33,14 +33,11 @@ const CHANNELS = [
 
 const Index = () => {
   const [active, setActive] = useState<number | null>(null);
-  useSeo({
-    path: "/",
-    description: "Project Premier is committed to transforming the lives of marginalized youth across the Greater Toronto Area (GTA) through music, creativity, and business education.",
-  });
+  useSeo("/");
 
   return (
     <>
-      <main>
+      <main id="main">
         <Hero />
 
         {/* Statement */}

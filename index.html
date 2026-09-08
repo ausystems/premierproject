@@ -29,30 +29,42 @@
     <link rel="icon" href="/lovable-uploads/4bf7339d-93aa-401c-960e-c32ebe22e59a.png" type="image/png">
     <link rel="apple-touch-icon" href="/lovable-uploads/4bf7339d-93aa-401c-960e-c32ebe22e59a.png">
 
+    <link rel="preload" href="/hero-poster.jpg" as="image" fetchpriority="high">
+    <link rel="dns-prefetch" href="https://www.youtube.com">
+    <link rel="dns-prefetch" href="https://i.ytimg.com">
     <link rel="preload" href="/fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/inter-tight-italic.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="/fonts/geist-mono.woff2" as="font" type="font/woff2" crossorigin>
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "NGO",
-      "name": "Project Premier",
-      "url": "https://premierproject.vercel.app/",
-      "logo": "https://premierproject.vercel.app/lovable-uploads/4bf7339d-93aa-401c-960e-c32ebe22e59a.png",
-      "description": "Project Premier is committed to transforming the lives of marginalized youth across the Greater Toronto Area (GTA) through music, creativity, and business education.",
-      "email": "info@projectpremier.org",
-      "sameAs": ["https://www.instagram.com/projectpremierx/"],
-      "areaServed": "Greater Toronto Area",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "130 Queens Quay East",
-        "addressLocality": "Toronto",
-        "addressRegion": "ON",
-        "addressCountry": "CA"
-      },
-      "openingHoursSpecification": [
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "17:00", "closes": "21:00" },
-        { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "12:00", "closes": "17:00" }
+      "@graph": [
+        {
+          "@type": "NGO",
+          "@id": "https://premierproject.vercel.app/#organization",
+          "name": "Project Premier",
+          "url": "https://premierproject.vercel.app/",
+          "logo": { "@type": "ImageObject", "url": "https://premierproject.vercel.app/lovable-uploads/4bf7339d-93aa-401c-960e-c32ebe22e59a.png", "width": 1920, "height": 1280 },
+          "image": "https://premierproject.vercel.app/lovable-uploads/4bf7339d-93aa-401c-960e-c32ebe22e59a.png",
+          "description": "Project Premier is committed to transforming the lives of marginalized youth across the Greater Toronto Area (GTA) through music, creativity, and business education.",
+          "email": "info@projectpremier.org",
+          "sameAs": ["https://www.instagram.com/projectpremierx/"],
+          "areaServed": { "@type": "AdministrativeArea", "name": "Greater Toronto Area" },
+          "address": { "@type": "PostalAddress", "streetAddress": "130 Queens Quay East", "addressLocality": "Toronto", "addressRegion": "ON", "addressCountry": "CA" },
+          "contactPoint": { "@type": "ContactPoint", "contactType": "general inquiries", "email": "info@projectpremier.org", "areaServed": "CA", "availableLanguage": "en" },
+          "openingHoursSpecification": [
+            { "@type": "OpeningHoursSpecification", "dayOfWeek": "Friday", "opens": "17:00", "closes": "21:00" },
+            { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "12:00", "closes": "17:00" }
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://premierproject.vercel.app/#website",
+          "url": "https://premierproject.vercel.app/",
+          "name": "Project Premier",
+          "inLanguage": "en-CA",
+          "publisher": { "@id": "https://premierproject.vercel.app/#organization" }
+        }
       ]
     }
     </script>
