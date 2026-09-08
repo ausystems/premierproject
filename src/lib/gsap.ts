@@ -28,8 +28,41 @@ export const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+/**
+ * Page transition coordination. While a curtain transition is active, load-triggered reveals on the
+ * incoming page wait for "page:ready" (dispatched as the curtain starts to lift) so the headline rises
+ * with the curtain instead of playing unseen behind it.
+ */
+export const transitionState = { active: false };
+
+export const whenPageReady = (cb: () => void): (() => void) => {
+  if (!transitionState.active) {
+    cb();
+    return () => undefined;
+  }
+  const handler = () => {
+    window.removeEventListener("page:ready", handler);
+    cb();
+  };
+  window.addEventListener("page:ready", handler);
+  return () => window.removeEventListener("page:ready", handler);
+};
+
 export const isTouch = () =>
   typeof window !== "undefined" &&
   window.matchMedia("(hover: none), (pointer: coarse)").matches;
 
 export { gsap, ScrollTrigger, SplitText };
+
+/**
+ * True when a scroll trigger at "top {ratio}" for `el` has already been passed, or can never be
+ * reached because the page is too short to scroll it there. Used by reveal fallbacks so content
+ * is never left hidden without taking scroll-driven entrances away from long pages.
+ */
+export const revealOverdue = (el: Element, ratio: number): boolean => {
+  const top = el.getBoundingClientRect().top;
+  const vh = window.innerHeight;
+  if (top <= vh * ratio) return true;
+  const maxScroll = document.documentElement.scrollHeight - vh;
+  return top + window.scrollY - vh * ratio > maxScroll;
+};
