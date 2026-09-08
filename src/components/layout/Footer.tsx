@@ -26,7 +26,7 @@ export const Footer = () => (
         <Button to="/programs" variant="secondary">Join a program</Button>
       </Reveal>
 
-      <div className="mt-20 grid gap-10 text-ui md:mt-28 md:grid-cols-12">
+      <Reveal className="mt-20 grid gap-10 text-ui md:mt-28 md:grid-cols-12">
         <nav aria-label="Footer" className="md:col-span-5">
           <ul className="flex flex-wrap gap-x-8 gap-y-3">
             {LINKS.map((l) => (
@@ -50,12 +50,12 @@ export const Footer = () => (
             </dd>
           </div>
         </dl>
-      </div>
+      </Reveal>
 
-      <p className="mt-14 text-sm text-grey">
+      <Reveal as="p" className="mt-14 text-sm text-grey">
         © Copyright 2026. Project Premier. All Rights Reserved. Built by{" "}
         <a href="https://www.audesigns.co/" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-fg">AuDesigns.co</a>
-      </p>
+      </Reveal>
     </div>
   </footer>
 );

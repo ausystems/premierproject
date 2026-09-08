@@ -50,8 +50,8 @@ export default {
       spacing: {
         section: "clamp(4rem, 8vw, 8rem)",
         gutter: "clamp(1rem, 2.5vw, 2.5rem)",
-        nav: "4rem",
-        "nav-sm": "3.5rem",
+        nav: "5.5rem",
+        "nav-sm": "4.5rem",
       },
       maxWidth: { site: "1680px", prose: "40em", statement: "26ch" },
       transitionTimingFunction: {

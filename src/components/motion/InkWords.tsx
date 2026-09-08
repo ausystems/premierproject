@@ -25,11 +25,13 @@ export const InkWords = ({ as = "p", children, className }: Props) => {
 
     document.fonts.ready.then(() => {
       if (cancelled) return;
-      const ink = getComputedStyle(el).color;
+      const cs = getComputedStyle(el);
+      const ink = cs.color;
+      const grey = `rgb(${cs.getPropertyValue("--grey").trim().split(/\s+/).join(", ")})`;
       split = new SplitText(el, { type: "words", wordsClass: "ink-word" });
       tween = gsap.fromTo(
         split.words,
-        { color: "rgb(138, 138, 138)" },
+        { color: grey },
         {
           color: ink,
           ease: "none",

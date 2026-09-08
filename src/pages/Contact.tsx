@@ -4,6 +4,7 @@ import { SectionTitle } from "@/components/ui-kit/SectionTitle";
 import { Button } from "@/components/ui-kit/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import { ImageReveal } from "@/components/motion/ImageReveal";
+import { useSeo } from "@/lib/seo";
 
 const EMAIL = "info@projectpremier.org";
 const MAP = "/lovable-uploads/49dfc3cf-39fa-42c9-b75f-0d3ff5743c90.png";
@@ -18,6 +19,11 @@ const CHANNELS = [
 
 const Contact = () => {
   const [copied, setCopied] = useState(false);
+  useSeo({
+    title: "Contact",
+    path: "/contact",
+    description: "Reach Project Premier at info@projectpremier.org or visit our studio at 130 Queens Quay East on the Toronto waterfront. Open Friday 5 PM to 9 PM and Saturday 12 PM to 5 PM.",
+  });
 
   useEffect(() => {
     if (!copied) return;

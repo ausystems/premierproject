@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui-kit/Button";
 import { MenuOverlay } from "@/components/layout/MenuOverlay";
 import { cn } from "@/lib/utils";
+import { gsap, prefersReducedMotion } from "@/lib/gsap";
 
 const LOGO = "/lovable-uploads/58c29542-568b-4ddb-898d-7f3c77b14af4.png";
 
@@ -16,15 +17,24 @@ const LINKS = [
 export const Nav = () => {
   const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
+  const bar = useRef<HTMLElement>(null);
 
   useEffect(() => setOpen(false), [pathname]);
 
+  // First paint: the bar settles in from above once, after the hero copy has begun its reveal.
+  useEffect(() => {
+    const el = bar.current;
+    if (!el || prefersReducedMotion()) return;
+    const tween = gsap.fromTo(el, { yPercent: -100, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.9, ease: "power3.out", delay: 0.15 });
+    return () => { tween.kill(); };
+  }, []);
+
   return (
     <>
-      <header data-theme="ink" className="fixed inset-x-0 top-0 z-50 bg-ink text-paper">
+      <header ref={bar} data-theme="ink" className="fixed inset-x-0 top-0 z-50 bg-ink text-paper">
         <nav aria-label="Primary" className="wrap flex h-nav-sm items-center justify-between lg:h-nav">
           <Link to="/" className="relative z-[60] flex items-center" aria-label="Project Premier, home">
-            <img src={LOGO} alt="Project Premier" width={120} height={80} className="h-8 w-auto lg:h-10" decoding="async" />
+            <img src={LOGO} alt="Project Premier" width={120} height={80} className="h-12 w-auto lg:h-16" decoding="async" />
           </Link>
 
           <div className="hidden items-center gap-10 lg:flex">

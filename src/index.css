@@ -14,7 +14,7 @@
     --bg: 242 242 240;
     --fg: 11 11 11;
     --fg2: 58 58 58;
-    --grey: 138 138 138;
+    --grey: 100 100 100;
 
     /* shadcn vocabulary, retuned to the monochrome palette (never pure white, never red) */
     --background: 60 4% 94.5%;
@@ -28,7 +28,7 @@
     --secondary: 60 3% 90%;
     --secondary-foreground: 0 0% 4.3%;
     --muted: 60 3% 90%;
-    --muted-foreground: 0 0% 54%;
+    --muted-foreground: 0 0% 39%;
     --accent: 60 3% 90%;
     --accent-foreground: 0 0% 4.3%;
     --destructive: 0 0% 4.3%;
@@ -42,8 +42,8 @@
   [data-theme="ink"] {
     --bg: 11 11 11;
     --fg: 242 242 240;
-    --fg2: 200 200 198;
-    --grey: 138 138 138;
+    --fg2: 205 205 203;
+    --grey: 160 160 160;
   }
 
   [data-theme] {

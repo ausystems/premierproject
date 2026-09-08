@@ -8,6 +8,7 @@ import { InkWords } from "@/components/motion/InkWords";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitReveal } from "@/components/motion/SplitReveal";
+import { useSeo } from "@/lib/seo";
 import heroPoster from "@/assets/hero-poster.jpg";
 import remixLogo from "@/assets/remix-project-logo.jpeg";
 import trilliumLogo from "@/assets/ontario-trillium-logo.jpeg";
@@ -32,6 +33,10 @@ const CHANNELS = [
 
 const Index = () => {
   const [active, setActive] = useState<number | null>(null);
+  useSeo({
+    path: "/",
+    description: "Project Premier is committed to transforming the lives of marginalized youth across the Greater Toronto Area (GTA) through music, creativity, and business education.",
+  });
 
   return (
     <>
@@ -83,29 +88,30 @@ const Index = () => {
           </Suspense>
         </section>
 
-        {/* Voices */}
+        {/* Voices: the film beside its heading, centred on each other; then the three quotes as one and two */}
         <section data-theme="ink" className="wrap py-section">
-          <div className="grid gap-8 md:grid-cols-12 md:items-end">
-            <SectionTitle className="md:col-span-6">What Our Youth Say.</SectionTitle>
-            <Reveal className="text-body text-fg2 md:col-span-5 md:col-start-8">
-              Real stories from the young creators building their future with Project Premier.
+          <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+            <div className="lg:col-span-4">
+              <SectionTitle>What Our Youth Say.</SectionTitle>
+              <Reveal className="mt-5 text-body text-fg2">
+                Real stories from the young creators building their future with Project Premier.
+              </Reveal>
+            </div>
+            <Reveal className="lg:col-span-8">
+              <div className="relative aspect-video w-full">
+                <iframe
+                  className="absolute inset-0 h-full w-full"
+                  src="https://www.youtube.com/embed/2z-Ztm9UHr4"
+                  title="Project Premier Video"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
             </Reveal>
           </div>
 
-          <Reveal className="mt-12 md:mt-14">
-            <div className="relative aspect-video w-full md:w-8/12">
-              <iframe
-                className="absolute inset-0 h-full w-full"
-                src="https://www.youtube.com/embed/2z-Ztm9UHr4"
-                title="Project Premier Video"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </Reveal>
-
-          <div className="mt-16 grid gap-12 md:mt-20 md:grid-cols-12 md:gap-8">
+          <div className="mt-16 grid gap-12 md:mt-24 md:grid-cols-12 md:gap-12">
             <figure className="md:col-span-7">
               <SplitReveal as="blockquote" className="max-w-[30ch] text-statement">{QUOTES[0]}</SplitReveal>
               <figcaption className="mt-5 text-sm text-grey">Youth Voice</figcaption>
@@ -121,7 +127,7 @@ const Index = () => {
           </div>
         </section>
 
-        {/* Partners and Get in touch: compact, together */}
+        {/* Partners and Get in touch */}
         <section data-theme="paper" className="wrap py-[clamp(3.5rem,6vw,6rem)]">
           <Reveal className="grid items-center gap-8 md:grid-cols-12">
             <div className="md:col-span-5">

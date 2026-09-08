@@ -3,12 +3,14 @@ import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui-kit/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import { prefersReducedMotion } from "@/lib/gsap";
+import { useSeo } from "@/lib/seo";
 
 const DIGITS = "0123456789";
 
 const NotFound = () => {
   const location = useLocation();
   const digits = useRef<HTMLSpanElement>(null);
+  useSeo({ title: "Page not found", path: location.pathname, description: "The page you were looking for does not exist.", noindex: true });
 
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
