@@ -1,173 +1,140 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap");
+/* Self-hosted, preloaded in index.html so the type is present at first paint (no swap reflow). */
+@font-face { font-family: "Inter Tight"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("/fonts/inter-tight.woff2") format("woff2"); }
+@font-face { font-family: "Inter Tight"; font-style: italic; font-weight: 100 900; font-display: swap; src: url("/fonts/inter-tight-italic.woff2") format("woff2"); }
+@font-face { font-family: "Geist Mono"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("/fonts/geist-mono.woff2") format("woff2"); }
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+  /* Theme vocabulary. Sections opt in with data-theme; everything inside reads bg/fg/grey. */
+  :root,
+  [data-theme="paper"] {
+    --bg: 242 242 240;
+    --fg: 11 11 11;
+    --fg2: 58 58 58;
+    --grey: 138 138 138;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
-
-    --primary: 0 0% 0%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 0%;
-
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.9%;
-
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 0%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 0%;
-
-    --radius: 0.75rem;
+    /* shadcn vocabulary, retuned to the monochrome palette (never pure white, never red) */
+    --background: 60 4% 94.5%;
+    --foreground: 0 0% 4.3%;
+    --card: 60 4% 94.5%;
+    --card-foreground: 0 0% 4.3%;
+    --popover: 60 4% 94.5%;
+    --popover-foreground: 0 0% 4.3%;
+    --primary: 0 0% 4.3%;
+    --primary-foreground: 60 4% 94.5%;
+    --secondary: 60 3% 90%;
+    --secondary-foreground: 0 0% 4.3%;
+    --muted: 60 3% 90%;
+    --muted-foreground: 0 0% 54%;
+    --accent: 60 3% 90%;
+    --accent-foreground: 0 0% 4.3%;
+    --destructive: 0 0% 4.3%;
+    --destructive-foreground: 60 4% 94.5%;
+    --border: 0 0% 82%;
+    --input: 0 0% 82%;
+    --ring: 0 0% 4.3%;
+    --radius: 0px;
   }
 
-  * {
-    @apply border-border;
+  [data-theme="ink"] {
+    --bg: 11 11 11;
+    --fg: 242 242 240;
+    --fg2: 200 200 198;
+    --grey: 138 138 138;
+  }
+
+  [data-theme] {
+    background-color: rgb(var(--bg));
+    color: rgb(var(--fg));
   }
 
   html {
-    scroll-behavior: smooth;
-    overflow-x: hidden;
+    background-color: #f2f2f0;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: auto;
   }
 
   body {
-    @apply bg-premier-white font-sans text-premier-black;
+    @apply bg-bg text-fg font-sans text-body antialiased;
     text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    position: relative;
+    font-feature-settings: "ss01", "cv11";
+    overflow-x: clip;
   }
 
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: linear-gradient(120deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.05)),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='800' viewBox='0 0 1600 800'%3E%3Cg fill-opacity='0.015'%3E%3Cpath fill='%23000000' d='M486 705.8c-109.3-21.8-223.4-32.2-335.3-19.4C99.5 692.1 49 703 0 719.8V800h843.8c-115.9-33.2-230.8-68.1-347.6-92.2C492.8 707.1 489.4 706.5 486 705.8z'/%3E%3Cpath fill='%23111111' d='M1600 0H0v719.8c49-16.8 99.5-27.8 150.7-33.5c111.9-12.7 226-2.4 335.3 19.4c3.4 0.7 6.8 1.4 10.2 2c116.8 24 231.7 59 347.6 92.2H1600V0z'/%3E%3Cpath fill='%23222222' d='M478.4 581c3.2 0.8 6.4 1.7 9.5 2.5c196.2 52.5 388.7 133.5 593.5 176.6c174.2 36.6 349.5 29.2 518.6-10.2V0H0v574.9c52.3-17.6 106.5-27.7 161.1-30.9C268.4 537.4 375.7 554.2 478.4 581z'/%3E%3Cpath fill='%23333333' d='M0 0v429.4c55.6-18.4 113.5-27.3 171.4-27.7c102.8-0.8 203.2 22.7 299.3 54.5c3 1 5.9 2 8.9 3c183.6 62 365.7 146.1 562.4 192.1c186.7 43.7 376.3 34.4 557.9-12.6V0H0z'/%3E%3Cpath fill='%23444444' d='M181.8 259.4c98.2 6 191.9 35.2 281.3 72.1c2.8 1.1 5.5 2.3 8.3 3.4c171 71.6 342.7 158.5 531.3 207.7c198.8 51.8 403.4 40.8 597.3-14.8V0H0v283.2C59 263.6 120.6 255.7 181.8 259.4z'/%3E%3Cpath fill='%23555555' d='M1600 0H0v136.3c62.3-20.9 127.7-27.5 192.2-19.2c93.6 12.1 180.5 47.7 263.3 89.6c2.6 1.3 5.1 2.6 7.7 3.9c158.4 81.1 319.7 170.9 500.3 223.2c210.5 61 430.8 49 636.6-16.6V0z'/%3E%3Cpath fill='%23666666' d='M454.9 86.3C600.7 177 751.6 269.3 924.1 325c208.6 67.4 431.3 60.8 637.9-5.3c12.8-4.1 25.4-8.4 38.1-12.9V0H288.1c56 21.3 108.7 50.6 159.7 82C450.2 83.4 452.5 84.9 454.9 86.3z'/%3E%3Cpath fill='%23777777' d='M1600 0H498c118.1 85.8 243.5 164.5 386.8 216.2c191.8 69.2 400 74.7 595 21.1c40.8-11.2 81.1-25.2 120.3-41.7V0z'/%3E%3Cpath fill='%23888888' d='M1397.5 154.8c47.2-10.6 93.6-25.3 138.6-43.8c21.7-8.9 43-18.8 63.9-29.5V0H643.4c62.9 41.7 129.7 78.2 202.1 107.4C1020.4 178.1 1214.2 196.1 1397.5 154.8z'/%3E%3Cpath fill='%23999999' d='M1315.3 72.4c75.3-12.6 148.9-37.1 216.8-72.4h-723C966.8 71 1144.7 101 1315.3 72.4z'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: cover;
-    background-position: center;
-    animation: subtle-wave 60s linear infinite alternate;
-    opacity: 0.2;
+  ::selection {
+    background-color: rgb(var(--fg));
+    color: rgb(var(--bg));
   }
 
-  @keyframes subtle-wave {
-    0% {
-      background-position: 0% 0%;
-    }
-    100% {
-      background-position: 100% 100%;
-    }
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
   }
 
-  .container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8;
+  h1, h2, h3, h4 {
+    font-weight: 450;
+    text-wrap: balance;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply font-display font-bold;
-    letter-spacing: -0.02em;
+  em {
+    font-style: italic;
+    font-weight: inherit;
   }
 
-  .section {
-    @apply py-16 md:py-24 lg:py-28;
-    position: relative;
+  img, video {
+    display: block;
+    max-width: 100%;
   }
 
-  .section::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background-image: url("data:image/svg+xml,%3Csvg width='100' height='200' viewBox='0 0 100 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23000000' fill-opacity='0.02' d='M0 0v50h100V0H0zm0 150v50h100v-50H0zm50-25c13.8 0 25-11.2 25-25S63.8 75 50 75 25 86.2 25 100s11.2 25 25 25zm0-100c13.8 0 25-11.2 25-25S63.8-25 50-25 25-13.8 25 0s11.2 25 25 25zm0 150c13.8 0 25-11.2 25-25s-11.2-25-25-25-25 11.2-25 25 11.2 25 25 25z'/%3E%3C/svg%3E");
-    opacity: 0.05;
-    animation: wave-motion 40s linear infinite alternate;
-  }
+  /* Lenis */
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
+  .lenis.lenis-smooth iframe { pointer-events: none; }
 
-  @keyframes wave-motion {
-    0% {
-      background-position: 0px 0px;
-    }
-    100% {
-      background-position: 100px 500px;
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
     }
   }
+}
 
-  @keyframes wave-slow {
-    0% {
-      transform: translateY(0) translateX(0);
-    }
-    50% {
-      transform: translateY(10px) translateX(5px);
-    }
-    100% {
-      transform: translateY(0) translateX(0);
-    }
+@layer components {
+  /* Monospace metadata: indices, labels, captions. Never placed above a heading. */
+  .meta {
+    @apply font-mono text-meta uppercase;
+    font-feature-settings: "tnum", "zero";
   }
 
-  @keyframes wave-medium {
-    0% {
-      transform: translateX(0) rotate(0);
-    }
-    50% {
-      transform: translateX(-5px) rotate(0.5deg);
-    }
-    100% {
-      transform: translateX(0) rotate(0);
-    }
+  .tnum {
+    font-feature-settings: "tnum";
   }
 
-  @keyframes wave-fast {
-    0% {
-      background-position: 0% 0%;
-    }
-    100% {
-      background-position: 100% 100%;
-    }
+  /* Page gutter + site max width */
+  .wrap {
+    @apply mx-auto w-full max-w-site px-gutter;
   }
 
-  @keyframes wave-animation {
-    0% {
-      background-position-x: 0;
-    }
-    100% {
-      background-position-x: 1000px;
-    }
+  /* Hairlines */
+  .hair-t { @apply border-t border-fg/15; }
+  .hair-b { @apply border-b border-fg/15; }
+  .hair-l { @apply border-l border-fg/15; }
+  .hair-r { @apply border-r border-fg/15; }
+
+  /* Stills are rendered in black and white; the hero video is the only colour on the site. */
+  .still {
+    filter: grayscale(1) contrast(1.05);
   }
 
-  @keyframes reverse-wave-animation {
-    0% {
-      background-position-x: 1000px;
-    }
-    100% {
-      background-position-x: 0;
-    }
+  /* SplitText line masks */
+  .split-mask {
+    overflow: hidden;
+    display: block;
   }
 }

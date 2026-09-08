@@ -1,10 +1,10 @@
-import { memo } from "react";
+import { Route, BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import PageTransition from "@/components/PageTransition";
+import { SmoothScroll } from "@/lib/SmoothScroll";
+import { PageTransition } from "@/components/layout/PageTransition";
+import { Nav } from "@/components/layout/Nav";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Programs from "./pages/Programs";
@@ -14,37 +14,27 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
   defaultOptions: {
-    queries: {
-      staleTime: 60 * 1000,
-      retry: 1,
-      networkMode: "always",
-      refetchOnWindowFocus: false,
-    },
+    queries: { staleTime: 60 * 1000, retry: 1, networkMode: "always", refetchOnWindowFocus: false },
   },
 });
 
-const AppRoutes = memo(() => (
-  <Routes>
-    <Route path="/" element={<Index />} />
-    <Route path="/about" element={<About />} />
-    <Route path="/programs" element={<Programs />} />
-    <Route path="/contact" element={<Contact />} />
-    <Route path="/referral" element={<Referral />} />
-    <Route path="*" element={<NotFound />} />
-  </Routes>
-));
-
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <SmoothScroll>
+        <Nav />
         <PageTransition>
-          <AppRoutes />
+          <Route path="/" element={<Index />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/programs" element={<Programs />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/referral" element={<Referral />} />
+          <Route path="*" element={<NotFound />} />
         </PageTransition>
         <Toaster />
         <Sonner />
-      </BrowserRouter>
-    </TooltipProvider>
+      </SmoothScroll>
+    </BrowserRouter>
   </QueryClientProvider>
 );
 

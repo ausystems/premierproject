@@ -1,237 +1,129 @@
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import { TextEffect } from "@/components/TextEffect";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
+import { Footer } from "@/components/layout/Footer";
+import { SectionTitle } from "@/components/ui-kit/SectionTitle";
+import { Button } from "@/components/ui-kit/Button";
+import { SplitReveal } from "@/components/motion/SplitReveal";
+import { InkWords } from "@/components/motion/InkWords";
+import { Reveal } from "@/components/motion/Reveal";
+import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/gsap";
 
-interface Program {
-  number: string;
-  title: string;
-  description: string;
-}
-
-const programs: Program[] = [
-  {
-    number: "01",
-    title: "Music",
-    description:
-      "Explore the power of music as a tool for expression and personal growth. Learn songwriting, production, and performance techniques.",
-  },
-  {
-    number: "02",
-    title: "Recording Arts",
-    description:
-      "Hands-on experience in professional studios with top producers and engineers.",
-  },
-  {
-    number: "03",
-    title: "Life Skills",
-    description:
-      "Build essential skills in communication, time management, and financial literacy to navigate life successfully.",
-  },
-  {
-    number: "04",
-    title: "Business Development",
-    description:
-      "Gain knowledge in entrepreneurship, branding, marketing, and financial management to build a sustainable career.",
-  },
+const PROGRAMS = [
+  { index: "01", title: "Music", body: "Explore the power of music as a tool for expression and personal growth. Learn songwriting, production, and performance techniques." },
+  { index: "02", title: "Recording Arts", body: "Hands-on experience in professional studios with top producers and engineers." },
+  { index: "03", title: "Life Skills", body: "Build essential skills in communication, time management, and financial literacy to navigate life successfully." },
+  { index: "04", title: "Business Development", body: "Gain knowledge in entrepreneurship, branding, marketing, and financial management to build a sustainable career." },
 ];
 
-interface ProgramCardProps {
-  program: Program;
-  index: number;
-  isVisible: boolean;
-}
-
-const ProgramCard = ({ program, index, isVisible }: ProgramCardProps) => {
-  const { number, title, description } = program;
-
-  return (
-    <div
-      className={cn(
-        "group relative rounded-2xl bg-premier-white text-premier-black p-6 sm:p-8 lg:p-10",
-        "flex flex-col h-full",
-        "transition-all duration-700 ease-out",
-        "hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/30",
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      )}
-      style={{ transitionDelay: `${index * 80}ms` }}
-    >
-      <div className="flex items-start justify-between mb-6 sm:mb-8 lg:mb-10">
-        <span className="text-xs sm:text-sm tracking-wide text-premier-black/50">
-          {number}
-        </span>
-        <ArrowUpRight className="w-4 h-4 sm:w-5 sm:h-5 text-premier-black/60 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-      </div>
-      <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tighter leading-[1.05] mb-4 sm:mb-6 text-premier-black">
-        {title}
-      </h3>
-      <p className="text-sm sm:text-base lg:text-lg text-premier-black/70 leading-relaxed">
-        {description}
-      </p>
-    </div>
-  );
-};
-
 const Programs = () => {
-  const programsSectionRef = useRef<HTMLElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const counter = useRef<HTMLSpanElement>(null);
+  const articles = useRef<HTMLElement[]>([]);
 
+  // The page's one system break: a tape-counter numeral that flips as each program passes.
   useEffect(() => {
-    const element = programsSectionRef.current;
-    if (!element) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1, rootMargin: "0px 0px -5% 0px" }
+    const el = counter.current;
+    if (!el) return;
+    const reduced = prefersReducedMotion();
+    const flip = (to: string) => {
+      if (el.textContent === to) return;
+      if (reduced) { el.textContent = to; return; }
+      gsap.timeline()
+        .to(el, { yPercent: -60, autoAlpha: 0, duration: 0.25, ease: "power2.in" })
+        .add(() => { el.textContent = to; })
+        .fromTo(el, { yPercent: 60, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.45, ease: "power3.out" });
+    };
+    const triggers = articles.current.filter(Boolean).map((a, i) =>
+      ScrollTrigger.create({
+        trigger: a,
+        start: "top 55%",
+        end: "bottom 55%",
+        onEnter: () => flip(PROGRAMS[i].index),
+        onEnterBack: () => flip(PROGRAMS[i].index),
+      })
     );
-
-    observer.observe(element);
-    return () => observer.disconnect();
+    return () => triggers.forEach((t) => t.kill());
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1">
-        <section className="bg-premier-white text-premier-black pt-32 md:pt-40 pb-20 md:pb-28">
-          <div className="container mx-auto px-6 lg:px-12">
-            <div className="mb-10">
-              <span className="inline-block border border-premier-black/30 rounded-full px-4 py-1.5 text-xs uppercase tracking-widest text-premier-black/80">
-                — Our Programs
-              </span>
-            </div>
-            <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-end">
-              <TextEffect
-                as="h1"
-                immediate
-                className="lg:col-span-8 font-display font-bold tracking-tighter leading-[0.95] text-5xl md:text-6xl lg:text-7xl text-premier-black"
-                highlightClassName="bg-premier-black text-premier-white px-3 py-1"
-                segments={[
-                  { text: "Hands-on programs that " },
-                  { text: "shape careers.", highlight: true },
-                ]}
-              />
-              <p className="lg:col-span-4 text-base md:text-lg text-premier-gray-600 leading-relaxed">
-                We provide immersive programs designed to inspire, educate, and
-                empower youth through music, recording arts, and life skills —
-                turning passion into a sustainable career.
-              </p>
-            </div>
+    <>
+      <main>
+        {/* Ink strip */}
+        <section data-theme="ink" className="wrap flex min-h-[70svh] flex-col justify-end pb-16 pt-[calc(theme(spacing.nav-sm)+3rem)] md:pb-24 lg:pt-[calc(theme(spacing.nav)+4rem)]">
+          <SplitReveal as="h1" trigger="load" delay={0.2} className="max-w-[11ch] text-display">
+            Hands-on programs that <em>shape</em> careers.
+          </SplitReveal>
+          <div className="mt-10 grid gap-8 md:mt-14 md:grid-cols-12 md:items-end">
+            <Reveal trigger="load" delay={0.8} className="max-w-prose text-body text-fg2 md:col-span-7 md:text-[1.125rem]">
+              We provide immersive programs designed to inspire, educate, and empower youth through music, recording arts, and life skills, turning passion into a sustainable career.
+            </Reveal>
+            <Reveal trigger="load" delay={1} className="meta text-grey md:col-span-5 md:text-right">
+              Four focused programs built to develop the next generation of creators, professionals, and leaders.
+            </Reveal>
           </div>
         </section>
 
-        <section
-          ref={programsSectionRef}
-          className="bg-premier-black text-premier-white py-24 md:py-32"
-        >
-          <div className="container mx-auto px-6 lg:px-12">
-            <div
-              className={cn(
-                "mb-12 transition-all duration-500",
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              )}
-            >
-              <span className="inline-block border border-premier-white/30 rounded-full px-4 py-1.5 text-xs uppercase tracking-widest text-premier-white/80">
-                — Our Programs
-              </span>
+        {/* Counter + four spreads */}
+        <section data-theme="paper" className="wrap grid gap-10 py-section md:grid-cols-12 md:gap-8">
+          <div className="hidden md:col-span-4 md:block">
+            <div className="sticky top-32 overflow-hidden">
+              <span className="meta text-grey">What we teach</span>
+              <div className="mt-4 overflow-hidden leading-none">
+                <span ref={counter} className="tnum inline-block text-[18vw] font-[450] leading-none tracking-[-0.05em]">01</span>
+              </div>
             </div>
-            <div
-              className={cn(
-                "grid lg:grid-cols-12 gap-8 lg:gap-16 items-end mb-16 transition-all duration-500 delay-100",
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              )}
-            >
-              <TextEffect
-                className="lg:col-span-8 font-display font-bold tracking-tighter leading-[0.95] text-5xl md:text-6xl lg:text-7xl"
-                highlightClassName="bg-premier-white text-premier-black px-3 py-1"
-                segments={[
-                  { text: "What we " },
-                  { text: "teach", highlight: true },
-                ]}
-              />
-              <p className="lg:col-span-4 text-base md:text-lg text-premier-white/80 leading-relaxed">
-                Four focused programs built to develop the next generation of
-                creators, professionals, and leaders.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 gap-6 md:gap-8">
-              {programs.map((program, index) => (
-                <ProgramCard
-                  key={program.title}
-                  program={program}
-                  index={index}
-                  isVisible={isVisible}
-                />
-              ))}
-            </div>
-            <div
-              className={cn(
-                "mt-16 transition-all duration-300 delay-300",
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              )}
-            >
-              <Link
-                to="/contact"
-                className="inline-flex items-center gap-2 bg-premier-white text-premier-black rounded-full px-7 py-3.5 text-base font-medium transition-all duration-300 hover:bg-premier-gray-200 hover:scale-105"
+          </div>
+          <div className="md:col-span-8">
+            <SplitReveal as="h2" className="text-h2 md:hidden">What we teach.</SplitReveal>
+            {PROGRAMS.map((p, i) => (
+              <article
+                key={p.title}
+                ref={(n) => { if (n) articles.current[i] = n; }}
+                className={`grid grid-cols-[3rem_minmax(0,1fr)] gap-x-4 hair-t py-12 md:grid-cols-[4rem_minmax(0,1fr)] md:gap-x-8 md:py-20 ${i === PROGRAMS.length - 1 ? "hair-b" : ""}`}
               >
-                Get In Touch
-                <ArrowUpRight className="w-4 h-4" />
-              </Link>
-            </div>
+                <span className="meta pt-2 text-grey">{p.index}</span>
+                <div>
+                  <SplitReveal as="h3" className="text-h2">{p.title}</SplitReveal>
+                  <InkWords className="mt-8 max-w-[34ch] text-statement">{p.body}</InkWords>
+                  <Reveal className="mt-8">
+                    <Button variant="link" to="/contact">Join this program</Button>
+                  </Reveal>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
-        <section className="bg-premier-white text-premier-black py-24 md:py-32">
-          <div className="container mx-auto px-6 lg:px-12">
-            <div className="mb-12">
-              <span className="inline-block border border-premier-black/30 rounded-full px-4 py-1.5 text-xs uppercase tracking-widest text-premier-black/80">
-                — Celebrate With Us
-              </span>
-            </div>
-            <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-end mb-16">
-              <TextEffect
-                className="lg:col-span-8 font-display font-bold tracking-tighter leading-[0.95] text-5xl md:text-6xl lg:text-7xl text-premier-black"
-                highlightClassName="bg-premier-black text-premier-white px-3 py-1"
-                segments={[
-                  { text: "Project Premier " },
-                  { text: "End of Year", highlight: true },
-                  { text: " Celebration" },
-                ]}
-              />
-              <p className="lg:col-span-4 text-base md:text-lg text-premier-gray-600 leading-relaxed">
-                A night honoring the growth, talent, and dedication of our youth.
-                Watch the highlights from our annual celebration.
-              </p>
-            </div>
-            <div className="max-w-5xl mx-auto">
-              <AspectRatio
-                ratio={16 / 9}
-                className="rounded-2xl overflow-hidden border-2 border-premier-black/10 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.15)]"
-              >
-                <iframe
-                  className="w-full h-full absolute inset-0"
-                  src="https://www.youtube.com/embed/xUKiKbnl62c"
-                  title="Premier Project End of Year Celebration"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </AspectRatio>
-            </div>
+        {/* Celebration */}
+        <section data-theme="ink" className="py-section">
+          <div className="wrap">
+            <SectionTitle>End of Year Celebration.</SectionTitle>
+            <Reveal className="mt-8 max-w-prose text-body text-fg2 md:mt-12">
+              A night honoring the growth, talent, and dedication of our youth. Watch the highlights from our annual celebration.
+            </Reveal>
           </div>
+          <Reveal className="mt-14 md:mt-20">
+            <div className="relative aspect-video w-full hair-t hair-b">
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src="https://www.youtube.com/embed/xUKiKbnl62c"
+                title="Premier Project End of Year Celebration"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <div className="wrap meta flex flex-wrap justify-between gap-4 py-4 text-grey">
+              <span>Premier Project End of Year Celebration</span>
+              <span>Annual</span>
+            </div>
+          </Reveal>
+          <Reveal className="wrap mt-16 flex flex-wrap items-center gap-6 md:mt-24">
+            <Button to="/referral" magnetic>Refer a Youth</Button>
+            <Button to="/contact" variant="secondary">Get In Touch</Button>
+          </Reveal>
         </section>
       </main>
       <Footer />
-    </div>
+    </>
   );
 };
 
