@@ -7,8 +7,8 @@ import { InkWords } from "@/components/motion/InkWords";
 import { Reveal } from "@/components/motion/Reveal";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useSeo } from "@/lib/seo";
-import remixLogo from "@/assets/remix-project-logo.jpeg";
-import trilliumLogo from "@/assets/ontario-trillium-logo.jpeg";
+import remixLogo from "@/assets/remix-project-logo.webp";
+import trilliumLogo from "@/assets/ontario-trillium-logo.webp";
 
 const COMMUNITY = "/community.webp";
 
@@ -95,9 +95,9 @@ const About = () => {
               <h2 className="text-h3">Partners & Collaborators.</h2>
               <Button variant="link" to="/programs" className="mt-4">Explore Our Programs</Button>
             </div>
-            <div className="flex flex-wrap items-center gap-10 md:col-span-6 md:col-start-7 md:justify-end md:gap-14">
-              <img src={remixLogo} alt="The Remix Project logo" width={640} height={335} loading="lazy" className="still h-12 w-auto md:h-14" />
-              <img src={trilliumLogo} alt="Ontario Trillium Foundation logo" width={1180} height={664} loading="lazy" className="still h-12 w-auto md:h-14" />
+            <div className="flex flex-wrap items-center gap-8 md:col-span-6 md:col-start-7 md:justify-end md:gap-12 lg:gap-16">
+              <img src={remixLogo} alt="The Remix Project logo" width={1462} height={622} loading="lazy" className="still h-20 w-auto md:h-24 lg:h-28" />
+              <img src={trilliumLogo} alt="Ontario Trillium Foundation logo" width={1214} height={878} loading="lazy" className="still h-20 w-auto md:h-24 lg:h-28" />
             </div>
           </Reveal>
         </section>
