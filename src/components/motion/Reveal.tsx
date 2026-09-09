@@ -1,5 +1,5 @@
 import { createElement, useEffect, useRef, type ElementType, type ReactNode } from "react";
-import { gsap, prefersReducedMotion, revealOverdue, whenPageReady } from "@/lib/gsap";
+import { gsap, prefersReducedMotion, reachableStart, revealOverdue, whenPageReady } from "@/lib/gsap";
 
 type Props = {
   as?: ElementType;
@@ -30,7 +30,7 @@ export const Reveal = ({ as = "div", children, className, trigger = "scroll", de
     const cancelReady = whenPageReady(() => {
       tween =
         trigger === "scroll"
-          ? gsap.to(el, { ...vars, scrollTrigger: { trigger: el, start: "top 90%", once: true } })
+          ? gsap.to(el, { ...vars, scrollTrigger: { trigger: el, start: reachableStart(el, 0.9), once: true } })
           : gsap.to(el, vars);
     });
 

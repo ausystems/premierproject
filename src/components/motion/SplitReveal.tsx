@@ -1,5 +1,5 @@
 import { createElement, useEffect, useRef, type ElementType, type ReactNode } from "react";
-import { gsap, SplitText, EASE_REVEAL, DURATION, STAGGER, prefersReducedMotion, revealOverdue, whenPageReady } from "@/lib/gsap";
+import { gsap, SplitText, EASE_REVEAL, DURATION, STAGGER, prefersReducedMotion, reachableStart, revealOverdue, whenPageReady } from "@/lib/gsap";
 
 type Props = {
   as?: ElementType;
@@ -55,7 +55,7 @@ export const SplitReveal = ({
         if (cancelled) return;
         tween =
           trigger === "scroll"
-            ? gsap.to(lines, { ...vars, scrollTrigger: { trigger: el, start: "top 88%", once: true } })
+            ? gsap.to(lines, { ...vars, scrollTrigger: { trigger: el, start: reachableStart(el, 0.88), once: true } })
             : gsap.to(lines, vars);
       });
 

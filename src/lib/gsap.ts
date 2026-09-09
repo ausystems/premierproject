@@ -66,3 +66,14 @@ export const revealOverdue = (el: Element, ratio: number): boolean => {
   const maxScroll = document.documentElement.scrollHeight - vh;
   return top + window.scrollY - vh * ratio > maxScroll;
 };
+
+/**
+ * ScrollTrigger start for "top {ratio}" that always stays reachable. ScrollTrigger only clamps a
+ * start beyond the maximum scroll during a full refresh, so triggers created after the load event
+ * near the bottom of a page would otherwise never fire. Recomputed on every refresh.
+ */
+export const reachableStart = (el: Element, ratio: number) => (): number => {
+  const natural = el.getBoundingClientRect().top + window.scrollY - window.innerHeight * ratio;
+  const max = ScrollTrigger.maxScroll(window);
+  return Math.max(0, Math.min(natural, max - 1));
+};

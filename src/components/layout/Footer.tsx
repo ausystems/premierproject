@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { Instagram, Mail } from "lucide-react";
-import { Button } from "@/components/ui-kit/Button";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
+
+const LOGO = "/logo-nav.png";
 
 const LINKS = [
   { to: "/", label: "Home" },
@@ -17,24 +18,42 @@ const underline =
   "relative after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out hover:after:scale-x-100";
 
 /**
- * Compact ink footer built to convert: the statement and the two asks on the left, the ways to
- * reach us (with icons) on the right, then one row of links and the copyright.
+ * Compact ink footer in two columns pinned to the same top and bottom lines: the mark above the
+ * statement on the left, the ways to reach us above the address on the right; then one hairline
+ * row of links and the copyright. Every section above already asks, so the footer carries no buttons.
  */
 export const Footer = () => (
-  <footer data-theme="ink">
-    <div className="wrap py-[clamp(3rem,6vw,5.5rem)]">
-      <div className="grid gap-10 md:grid-cols-12 md:items-end md:gap-8">
-        <div className="md:col-span-7">
-          <SplitReveal as="p" className="max-w-[26ch] text-h3">
+  <footer data-theme="ink" className="border-t border-fg/15">
+    <div className="wrap pt-[clamp(2.25rem,4vw,3.5rem)] pb-[clamp(1.5rem,2.5vw,2rem)]">
+      <div className="grid gap-8 md:grid-cols-12">
+        <div className="flex flex-col gap-8 md:col-span-6 md:justify-between lg:col-span-7">
+          <Reveal y={12}>
+            <Link
+              to="/"
+              aria-label="Project Premier, home"
+              className="inline-block transition-opacity duration-300 ease-out hover:opacity-70"
+            >
+              <img
+                src={LOGO}
+                alt="Project Premier"
+                width={384}
+                height={256}
+                loading="lazy"
+                decoding="async"
+                className="h-16 w-auto lg:h-[4.5rem]"
+              />
+            </Link>
+          </Reveal>
+          <SplitReveal as="p" className="max-w-[24ch] text-h3">
             Empowering youth across the GTA through music, <em>creativity</em>, and business.
           </SplitReveal>
-          <Reveal className="mt-7 flex flex-wrap items-center gap-3">
-            <Button to="/referral" magnetic className="w-full justify-center sm:w-auto">Refer a Youth</Button>
-            <Button to="/programs" variant="secondary" className="w-full justify-center sm:w-auto">Join a program</Button>
-          </Reveal>
         </div>
 
-        <Reveal as="address" className="not-italic md:col-span-4 md:col-start-9">
+        <Reveal
+          as="address"
+          delay={0.1}
+          className="flex flex-col gap-8 not-italic md:col-span-6 md:col-start-7 md:justify-between lg:col-span-4 lg:col-start-9"
+        >
           <ul className="space-y-3 text-ui">
             <li>
               <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-3">
@@ -49,14 +68,18 @@ export const Footer = () => (
               </a>
             </li>
           </ul>
-          <p className="mt-5 text-sm text-fg2">
-            130 Queens Quay East, Toronto, ON, Canada<br />
-            Friday 5 PM to 9 PM. Saturday 12 PM to 5 PM.
+          <p className="text-sm leading-relaxed text-fg2">
+            <span className="inline-block">130 Queens Quay East, Toronto, ON, Canada</span>
+            <br />
+            <span className="inline-block">Friday 5 PM to 9 PM.</span> <span className="inline-block">Saturday 12 PM to 5 PM.</span>
           </p>
         </Reveal>
       </div>
 
-      <Reveal className="mt-12 flex flex-col gap-4 text-sm text-grey md:mt-14 md:flex-row md:items-center md:justify-between">
+      <Reveal
+        delay={0.2}
+        className="hair-t mt-10 flex flex-col gap-4 pt-5 text-sm text-grey lg:mt-12 lg:flex-row lg:items-center lg:justify-between"
+      >
         <nav aria-label="Footer">
           <ul className="grid grid-cols-2 gap-x-6 gap-y-2 sm:flex sm:flex-wrap">
             {LINKS.map((l) => (
