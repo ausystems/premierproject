@@ -2,7 +2,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Article, type ArticleSection } from "@/components/ui-kit/Article";
 import { useSeo } from "@/lib/seo";
 
-const EMAIL = <a href="mailto:info@projectpremier.org" className="text-fg underline decoration-fg/40 underline-offset-4 transition-colors hover:decoration-fg">info@projectpremier.org</a>;
+const EMAIL = <a href="mailto:info@projectpremier.org" className="inline-block py-3 -my-3 text-fg underline decoration-fg/40 underline-offset-4 transition-colors hover:decoration-fg">info@projectpremier.org</a>;
 
 const SECTIONS: ArticleSection[] = [
   {

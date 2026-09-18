@@ -55,7 +55,7 @@ export const Button = ({
   const classes =
     variant === "link"
       ? cn(
-          "group relative inline-flex items-center gap-1.5 text-ui",
+          "group relative inline-flex min-h-[44px] items-center gap-1.5 py-3 -my-3 text-ui",
           "after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-300 after:ease-out group-hover:after:scale-x-100 hover:after:scale-x-100",
           className
         )

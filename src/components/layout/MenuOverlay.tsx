@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { Instagram, Mail } from "lucide-react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLenis } from "@/lib/SmoothScroll";
 
@@ -13,10 +14,11 @@ const LINKS = [
 
 type Props = { open: boolean; onClose: () => void };
 
-/** Full-screen ink menu: five links, nothing else. */
+/** Full-screen ink menu: five links, and the two ways to reach us at its foot. */
 export const MenuOverlay = ({ open, onClose }: Props) => {
   const root = useRef<HTMLDivElement>(null);
   const items = useRef<HTMLLIElement[]>([]);
+  const foot = useRef<HTMLDivElement>(null);
   const lenis = useLenis();
   const mounted = useRef(false);
 
@@ -42,6 +44,9 @@ export const MenuOverlay = ({ open, onClose }: Props) => {
         { yPercent: reduced ? 0 : 110, autoAlpha: reduced ? 0 : 1 },
         { yPercent: 0, autoAlpha: 1, duration: reduced ? 0.2 : 0.9, ease: "power3.out", stagger: reduced ? 0 : 0.07, delay: reduced ? 0 : 0.25 }
       );
+      if (foot.current) {
+        gsap.fromTo(foot.current, { autoAlpha: 0, y: reduced ? 0 : 12 }, { autoAlpha: 1, y: 0, duration: reduced ? 0.2 : 0.7, ease: "power3.out", delay: reduced ? 0 : 0.55 });
+      }
       window.setTimeout(() => el.querySelector<HTMLAnchorElement>("a")?.focus(), 400);
     } else {
       gsap.to(el, {
@@ -71,7 +76,7 @@ export const MenuOverlay = ({ open, onClose }: Props) => {
       data-theme="ink"
       data-lenis-prevent
       aria-hidden={!open}
-      className="fixed inset-0 z-40 overflow-y-auto pt-nav-sm lg:pt-nav"
+      className="fixed inset-0 z-40 flex flex-col overflow-y-auto pt-nav-sm [touch-action:pan-y] pb-[env(safe-area-inset-bottom)] lg:pt-nav"
     >
       <nav aria-label="Menu" className="wrap pt-10">
         <ul className="flex flex-col">
@@ -84,6 +89,23 @@ export const MenuOverlay = ({ open, onClose }: Props) => {
           ))}
         </ul>
       </nav>
+
+      <div ref={foot} className="wrap mt-auto pb-8 pt-10 opacity-0 sm:pb-10">
+        <ul className="hair-t flex flex-col gap-1 pt-5 text-ui sm:flex-row sm:gap-10">
+          <li>
+            <a href="mailto:info@projectpremier.org" className="tap gap-3 transition-opacity duration-300 hover:opacity-60">
+              <Mail aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
+              info@projectpremier.org
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="tap gap-3 transition-opacity duration-300 hover:opacity-60">
+              <Instagram aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
+              @projectpremierx
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
   );
 };

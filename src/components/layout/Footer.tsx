@@ -24,7 +24,7 @@ const underline =
  */
 export const Footer = () => (
   <footer data-theme="ink" className="border-t border-fg/15">
-    <div className="wrap pt-[clamp(2.25rem,4vw,3.5rem)] pb-[clamp(1.5rem,2.5vw,2rem)]">
+    <div className="wrap pt-[clamp(2.25rem,4vw,3.5rem)] pb-[calc(clamp(1.5rem,2.5vw,2rem)+env(safe-area-inset-bottom))]">
       <div className="grid gap-8 md:grid-cols-12">
         <div className="flex flex-col gap-8 md:col-span-6 md:justify-between lg:col-span-7">
           <Reveal y={12}>
@@ -56,13 +56,13 @@ export const Footer = () => (
         >
           <ul className="space-y-3 text-ui">
             <li>
-              <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-3">
+              <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="group tap gap-3">
                 <Instagram aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
                 <span className={underline}>@projectpremierx</span>
               </a>
             </li>
             <li>
-              <a href="mailto:info@projectpremier.org" className="group inline-flex items-center gap-3">
+              <a href="mailto:info@projectpremier.org" className="group tap gap-3">
                 <Mail aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
                 <span className={underline}>info@projectpremier.org</span>
               </a>
@@ -83,13 +83,13 @@ export const Footer = () => (
         <nav aria-label="Footer">
           <ul className="grid grid-cols-2 gap-x-6 gap-y-2 sm:flex sm:flex-wrap">
             {LINKS.map((l) => (
-              <li key={l.to}><Link to={l.to} className={`${underline} transition-colors hover:text-fg`}>{l.label}</Link></li>
+              <li key={l.to}><Link to={l.to} className={`tap ${underline} transition-colors hover:text-fg`}>{l.label}</Link></li>
             ))}
           </ul>
         </nav>
         <p>
           © Copyright 2026. Project Premier. All Rights Reserved. Built by{" "}
-          <a href="https://www.skyboundscaling.com" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-fg">Skybound Scaling</a>
+          <a href="https://www.skyboundscaling.com" target="_blank" rel="noopener noreferrer" className="tap transition-colors hover:text-fg">Skybound Scaling</a>
         </p>
       </Reveal>
     </div>

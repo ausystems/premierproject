@@ -64,6 +64,8 @@ const Hero = () => {
         <img
           src={heroPoster}
           alt="Guitars on stands inside the Project Premier recording studio"
+          width={1920}
+          height={1080}
           className="absolute inset-0 h-full w-full object-cover object-center"
           loading="eager"
           fetchPriority="high"

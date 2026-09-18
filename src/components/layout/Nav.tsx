@@ -62,7 +62,7 @@ export const Nav = () => {
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
             aria-controls="menu-overlay"
-            className="relative z-[60] -mr-2 px-2 py-2 text-ui lg:hidden"
+            className="relative z-[60] -mr-3 flex min-h-[44px] min-w-[44px] items-center justify-center px-3 text-ui lg:hidden"
           >
             <span className="relative block h-[1em] overflow-hidden">
               <span className={cn("block transition-transform duration-300 ease-out", open && "-translate-y-full")}>Menu</span>

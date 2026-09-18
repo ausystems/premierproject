@@ -165,7 +165,7 @@ const Referral = () => {
                       <div className={cn("rounded-[4px] border", err("reasonForReferral") ? "border-2 border-fg" : "border-fg/30")}>
                         {REASONS.map((r, i) => (
                           <label key={r} className={cn("flex min-h-[48px] cursor-pointer items-center gap-3 px-4 py-3 text-base", i > 0 && "border-t border-fg/15")}>
-                            <input type="radio" value={r} {...register("reasonForReferral")} className="h-4 w-4 shrink-0 accent-ink" />
+                            <input type="radio" value={r} {...register("reasonForReferral")} className="h-5 w-5 shrink-0 accent-ink" />
                             <span>{r}</span>
                           </label>
                         ))}
@@ -229,7 +229,7 @@ const Referral = () => {
             </Reveal>
             <Reveal className="mt-8 text-body text-fg2">
               If you have any questions about our privacy policies or wish to request access to, correct, or withdraw personal information, please contact{" "}
-              <a href="mailto:info@projectpremier.org" className="text-fg underline decoration-fg/40 underline-offset-4 transition-colors hover:decoration-fg">info@projectpremier.org</a>
+              <a href="mailto:info@projectpremier.org" className="inline-block py-3 -my-3 text-fg underline decoration-fg/40 underline-offset-4 transition-colors hover:decoration-fg">info@projectpremier.org</a>
             </Reveal>
           </div>
         </section>

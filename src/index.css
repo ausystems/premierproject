@@ -55,6 +55,8 @@
     background-color: #f2f2f0;
     -webkit-text-size-adjust: 100%;
     scroll-behavior: auto;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
   }
 
   body {
@@ -89,12 +91,23 @@
     max-width: 100%;
   }
 
+  /* No double-tap zoom delay on anything a thumb can press. */
+  a, button, input, select, textarea, label, summary {
+    touch-action: manipulation;
+  }
+
+  /* Fields never trigger the iOS zoom-on-focus, whatever the token says. */
+  input, select, textarea {
+    font-size: max(1rem, 1em);
+  }
+
   /* Lenis */
   html.lenis, html.lenis body { height: auto; }
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
   .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
   .lenis.lenis-stopped { overflow: hidden; }
-  .lenis.lenis-smooth iframe { pointer-events: none; }
+  /* Only block iframes while the page is in motion, so embedded videos stay tappable at rest. */
+  .lenis.lenis-smooth.lenis-scrolling iframe { pointer-events: none; }
 
   @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {
@@ -118,7 +131,17 @@
 
   /* Page gutter + site max width */
   .wrap {
-    @apply mx-auto w-full max-w-site px-gutter;
+    @apply mx-auto w-full max-w-site;
+    padding-left: max(theme(spacing.gutter), env(safe-area-inset-left));
+    padding-right: max(theme(spacing.gutter), env(safe-area-inset-right));
+  }
+
+  /* Extends a small inline link's hit area to 44px without moving anything. */
+  .tap {
+    @apply relative inline-flex items-center;
+    min-height: 44px;
+    padding-block: 0.75rem;
+    margin-block: -0.75rem;
   }
 
   /* Hairlines */

@@ -25,8 +25,8 @@ const QUOTES = [
 ];
 
 const CHANNELS = [
-  { label: "Email", node: <a href="mailto:info@projectpremier.org" className="transition-colors hover:text-fg">info@projectpremier.org</a> },
-  { label: "Instagram", node: <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-fg">@projectpremierx</a> },
+  { label: "Email", node: <a href="mailto:info@projectpremier.org" className="tap transition-colors hover:text-fg">info@projectpremier.org</a> },
+  { label: "Instagram", node: <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="tap transition-colors hover:text-fg">@projectpremierx</a> },
   { label: "Address", node: <>130 Queens Quay East<br />Toronto, ON, Canada</> },
   { label: "Hours", node: <>Friday 5 PM to 9 PM<br />Saturday 12 PM to 5 PM<br />Sunday to Thursday closed</> },
 ];
