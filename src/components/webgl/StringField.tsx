@@ -368,7 +368,7 @@ export const StringField = ({ className }: Props) => {
           const hi = Math.max(pick, lastPick);
           for (let i = 0; i < S; i++) {
             const z = zOf(i);
-            if (z > lo && z <= hi) strike(i, 0.32 + ((i * 0.618) % 0.36), gsap.utils.clamp(0.006, 0.016, scrollSpeed * 0.000012));
+            if (z > lo && z <= hi) strike(i, 0.32 + ((i * 0.618) % 0.36), gsap.utils.clamp(0.004, 0.009, scrollSpeed * 0.000007));
           }
           lastPick = pick;
         }

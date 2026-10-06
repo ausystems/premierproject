@@ -1,4 +1,4 @@
-import { createElement, useEffect, useRef, type ElementType, type ReactNode } from "react";
+import { createElement, useLayoutEffect, useRef, type ElementType, type ReactNode } from "react";
 import { gsap, prefersReducedMotion, reachableStart, revealOverdue, whenPageReady } from "@/lib/gsap";
 
 type Props = {
@@ -13,13 +13,14 @@ type Props = {
 
 /**
  * Soft entrance for blocks that should not be split: statements, captions, buttons, media frames.
+ * The hidden starting state is applied before the first paint, so nothing flashes and then vanishes.
  * Nothing plays under the page transition curtain: triggers are armed once the page is revealed,
  * so above-the-fold blocks enter as the curtain lifts and below-the-fold blocks enter on scroll.
  */
 export const Reveal = ({ as = "div", children, className, trigger = "scroll", delay = 0, y = 16, id }: Props) => {
   const ref = useRef<HTMLElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
 

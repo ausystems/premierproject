@@ -1,6 +1,7 @@
 import { Footer } from "@/components/layout/Footer";
 import { SectionTitle } from "@/components/ui-kit/SectionTitle";
 import { Button } from "@/components/ui-kit/Button";
+import { VideoEmbed } from "@/components/ui-kit/VideoEmbed";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { InkWords } from "@/components/motion/InkWords";
 import { Reveal } from "@/components/motion/Reveal";
@@ -71,16 +72,7 @@ const Programs = () => {
               </Reveal>
             </div>
             <Reveal className="lg:col-span-8">
-              <div className="relative aspect-video w-full">
-                <iframe
-                  className="absolute inset-0 h-full w-full"
-                  src="https://www.youtube.com/embed/xUKiKbnl62c"
-                  title="Premier Project End of Year Celebration"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+              <VideoEmbed id="xUKiKbnl62c" title="Premier Project End of Year Celebration" />
             </Reveal>
           </div>
         </section>

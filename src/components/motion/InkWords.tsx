@@ -1,4 +1,4 @@
-import { createElement, useEffect, useRef, type ElementType, type ReactNode } from "react";
+import { createElement, useLayoutEffect, useRef, type ElementType, type ReactNode } from "react";
 import { gsap, SplitText, prefersReducedMotion } from "@/lib/gsap";
 
 type Props = {
@@ -11,23 +11,25 @@ type Props = {
  * The site's text signature. A statement starts in grey and its words step into full ink,
  * one after another, as it scrolls through the viewport, like a lyric being read.
  * Scrubbed, so it works with native scrolling on touch. Reduced motion: plain ink.
+ * The statement rests in grey from the first paint, so it never flashes ink before it is read.
  */
 export const InkWords = ({ as = "p", children, className }: Props) => {
   const ref = useRef<HTMLElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
 
     let split: SplitText | null = null;
     let tween: gsap.core.Tween | null = null;
     let cancelled = false;
+    const cs = getComputedStyle(el);
+    const ink = cs.color;
+    const grey = `rgb(${cs.getPropertyValue("--grey").trim().split(/\s+/).join(", ")})`;
+    el.style.color = grey;
 
     document.fonts.ready.then(() => {
       if (cancelled) return;
-      const cs = getComputedStyle(el);
-      const ink = cs.color;
-      const grey = `rgb(${cs.getPropertyValue("--grey").trim().split(/\s+/).join(", ")})`;
       split = new SplitText(el, { type: "words", wordsClass: "ink-word" });
       tween = gsap.fromTo(
         split.words,
@@ -43,6 +45,7 @@ export const InkWords = ({ as = "p", children, className }: Props) => {
 
     return () => {
       cancelled = true;
+      el.style.color = "";
       tween?.scrollTrigger?.kill();
       tween?.kill();
       split?.revert();

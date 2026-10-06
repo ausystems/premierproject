@@ -1,4 +1,4 @@
-import { createElement, useEffect, useRef, type ElementType, type ReactNode } from "react";
+import { createElement, useLayoutEffect, useRef, type ElementType, type ReactNode } from "react";
 import { gsap, SplitText, EASE_REVEAL, DURATION, STAGGER, prefersReducedMotion, reachableStart, revealOverdue, whenPageReady } from "@/lib/gsap";
 
 type Props = {
@@ -17,6 +17,8 @@ type Props = {
  * a page headline (h1) also inks in, its weight settling from light to its own as the lines rise;
  * the split is reverted after the reveal so the DOM returns to plain text (resize-safe, a11y-safe).
  * Nothing plays under the page transition curtain: triggers are armed once the page is revealed.
+ * The block is hidden before the first paint and shown again the moment its lines are parked below
+ * their masks, so a headline never flashes and then vanishes before it rises.
  * Content is never left hidden: a fallback timer plays the reveal if no trigger ever fires.
  */
 export const SplitReveal = ({
@@ -30,9 +32,13 @@ export const SplitReveal = ({
 }: Props) => {
   const ref = useRef<HTMLElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
+
+    gsap.set(el, { autoAlpha: 0 });
+    // Insurance for the hidden starting state, should the split never happen.
+    const unveil = window.setTimeout(() => gsap.set(el, { autoAlpha: 1 }), 3000);
 
     let split: SplitText | null = null;
     let tween: gsap.core.Tween | null = null;
@@ -52,6 +58,8 @@ export const SplitReveal = ({
       split = new SplitText(el, { type: "lines", mask: "lines", linesClass: "split-line" });
       const lines = split.lines;
       gsap.set(lines, { yPercent: 110, ...(ink ? { fontWeight: Math.min(300, weight) } : {}) });
+      gsap.set(el, { autoAlpha: 1 });
+      window.clearTimeout(unveil);
       const vars = { yPercent: 0, ...(ink ? { fontWeight: weight } : {}), duration: DURATION.base, ease: EASE_REVEAL, stagger, delay, onComplete: revert };
 
       cancelReady = whenPageReady(() => {
@@ -74,6 +82,8 @@ export const SplitReveal = ({
 
     return () => {
       cancelled = true;
+      window.clearTimeout(unveil);
+      gsap.set(el, { clearProps: "opacity,visibility" });
       cancelReady?.();
       window.clearTimeout(fallback);
       tween?.scrollTrigger?.kill();

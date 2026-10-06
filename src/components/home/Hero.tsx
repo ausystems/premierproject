@@ -13,7 +13,7 @@ import heroVideo720 from "@/assets/hero-video-720.mp4";
 /** Where the exit plays: motion welcome, and a screen tall enough to hold the copy while pinned. */
 const EXIT_QUERY = "(prefers-reduced-motion: no-preference) and (min-height: 620px)";
 /** Scroll progress at which the closed film becomes a string and is struck. */
-const STRIKE = 0.7;
+const STRIKE = 0.66;
 
 /**
  * Background video (unchanged in substance)
@@ -24,10 +24,11 @@ const STRIKE = 0.7;
  * - Honours prefers-reduced-motion: those visitors keep the still poster.
  * The copy layer is one statement and one ask, bottom-left.
  *
- * Exit: the hero holds for a short runway while the film closes like a letterbox into a single line
- * of light the width of the page. The line is struck as it forms, then the house lights come up: the
- * ink turns to paper and the string to ink, ringing as it glides down onto the page, which carries
- * straight on into the statement. It is the first string of the site.
+ * Exit: the film holds still for a short runway and closes like a letterbox into a single line of
+ * light the width of the page, while the copy keeps travelling up at the speed of the reader's hand,
+ * so the page never feels stopped. The line is struck as it forms, then the house lights come up
+ * slowly: the ink turns to paper and the string to ink, ringing as it glides down onto the page, which
+ * carries straight on into the statement. It is the first string of the site.
  */
 const Hero = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -92,6 +93,7 @@ const Hero = () => {
     mm.add(EXIT_QUERY, () => {
       const gutter = () => parseFloat(getComputedStyle(copy).paddingLeft) || 16;
       const band = () => Math.max(stage.clientHeight / 2 - 1, 0);
+      const runway = () => Math.max(section.offsetHeight - stage.clientHeight, 1);
       let last = 0;
 
       gsap.set(media, { clipPath: "inset(0px 0px 0px 0px)" });
@@ -111,7 +113,7 @@ const Hero = () => {
             if (last < STRIKE && p >= STRIKE) stringRef.current?.pluck(0.36 + Math.random() * 0.28, gsap.utils.clamp(18, 32, v * 0.02), 1);
             else if (last >= STRIKE && p < STRIKE) stringRef.current?.pluck(0.36 + Math.random() * 0.28, gsap.utils.clamp(10, 20, v * 0.012), -1);
             stringRef.current?.setInteractive(p >= STRIKE);
-            const closed = p > 0.76;
+            const closed = p > 0.72;
             if (closed !== closedRef.current) {
               closedRef.current = closed;
               syncPlayback();
@@ -121,16 +123,17 @@ const Hero = () => {
         },
       });
 
-      tl.to(copy, { y: () => -window.innerHeight * 0.08, autoAlpha: 0, ease: "power1.in", duration: 0.32 }, 0)
-        .to(media, { clipPath: () => `inset(${band()}px ${gutter()}px ${band()}px ${gutter()}px)`, ease: "power3.inOut", duration: 0.64 }, 0.05)
-        .to(lens, { scale: 1.14, ease: "power1.inOut", duration: 0.64 }, 0.05)
-        .to(line, { autoAlpha: 1, duration: 0.05 }, 0.64)
-        .to(media, { autoAlpha: 0, duration: 0.05 }, 0.69)
-        // house lights: the stage's own palette flips, so the ringing string turns to ink on paper
-        .to(stage, { "--bg": "242 242 240", "--fg": "11 11 11", ease: "power2.inOut", duration: 0.16 }, 0.74)
+      // the copy moves exactly as far as the page would have, so the hand never feels the hold
+      tl.to(copy, { y: () => -runway(), duration: 1 }, 0)
+        .to(copy, { autoAlpha: 0, ease: "power1.in", duration: 0.26 }, 0.28)
+        .to(media, { clipPath: () => `inset(${band()}px ${gutter()}px ${band()}px ${gutter()}px)`, ease: "power3.inOut", duration: 0.6 }, 0.04)
+        .to(lens, { scale: 1.12, ease: "power1.inOut", duration: 0.6 }, 0.04)
+        .to(line, { autoAlpha: 1, duration: 0.05 }, 0.6)
+        .to(media, { autoAlpha: 0, duration: 0.06 }, 0.64)
+        // house lights, slowly: the stage's own palette flips, so the ringing string turns to ink on paper
+        .to(stage, { "--bg": "242 242 240", "--fg": "11 11 11", ease: "sine.inOut", duration: 0.3 }, 0.68)
         // and the string glides down to rest just above the statement that follows
-        .to(line, { y: () => stage.clientHeight * 0.24, ease: "power3.inOut", duration: 0.22 }, 0.74)
-        .to({}, { duration: 0.1 }, 0.9);
+        .to(line, { y: () => stage.clientHeight * 0.24, ease: "power2.inOut", duration: 0.32 }, 0.68);
 
       return () => {
         gsap.set(stage, { clearProps: "--bg,--fg" });

@@ -1,13 +1,13 @@
 import { gsap, prefersReducedMotion, transitionState } from "@/lib/gsap";
 
 /**
- * Every hairline on the site is a string. A fine pointer that crosses one slowly takes hold of it and
- * the string bends with the cursor until it slips off and rings; a quick crossing strums it, and lines
- * carried past a resting cursor by the scroll are strummed where they pass. On touch screens the finger
- * moves with the page, so the middle of the screen plays the part of a music box comb instead: every
- * line scrolled past it rings, harder for a faster flick, struck where the thumb last was.
+ * Every hairline on the site is a string. A mouse that crosses one slowly takes hold of it and the
+ * string bends with the cursor until it slips off and rings; a quick crossing strums it. Only a moving
+ * hand plays them: lines carried past a resting cursor by the scroll stay perfectly still, so scrolling
+ * is always calm. Touch screens hear the strings only in the scripted moments (see moments.ts).
  * Motion is modal (eight damped harmonics advanced exactly each frame), so it stays stable at any frame
- * rate. One ticker runs only while something can move; with reduced motion every line stays a still rule.
+ * rate. Every frame reads all positions first and writes all paths after, so layout is computed at most
+ * once. One ticker runs only while something can move; with reduced motion every line stays a still rule.
  */
 
 const MODES = 8;
@@ -22,10 +22,6 @@ const HOLD_IDLE = 900;
 const IDLE = 450;
 /** Below this swing, in px, a string is still. */
 const STILL = 0.035;
-/** Touch screens: the comb sits a little below the middle of the screen. */
-const COMB = 0.55;
-/** px/s: slower passes over the comb (a reveal settling, a nudge) do not sound. */
-const COMB_SPEED = 140;
 
 export type StringHandle = {
   /** Strike the string at `at` (0..1 along it) with a swing of `amp` px. */
@@ -56,15 +52,16 @@ type Str = Parts & {
   interactive: boolean;
   grab: { at: number; d: number } | null;
   last: number | null;
+  /** Page scroll when `last` was sampled: a crossing caused by scrolling is never played. */
+  lastScroll: number;
 };
 
 const all = new Set<Str>();
-const pointer = { x: -1, y: -1, on: false, fine: false };
+const pointer = { x: -1, y: -1, on: false, moved: false };
 let lastInput = 0;
 let running = false;
 let installed = false;
 let io: IntersectionObserver | null = null;
-let coarse: MediaQueryList | null = null;
 let ro: ResizeObserver | null = null;
 const byTarget = new Map<Element, Str>();
 const scratch = new Float64Array(MODES);
@@ -175,8 +172,7 @@ const release = (s: Str) => {
   wake(s);
 };
 
-const interact = (s: Str, dt: number) => {
-  const r = s.host.getBoundingClientRect();
+const interact = (s: Str, r: DOMRect, dt: number) => {
   if (!pointer.on || pointer.x < r.left || pointer.x > r.right) {
     if (s.grab) release(s);
     s.last = null;
@@ -184,21 +180,25 @@ const interact = (s: Str, dt: number) => {
   }
   const rel = pointer.y - r.top;
   const last = s.last;
+  const scrolled = Math.abs(window.scrollY - s.lastScroll) > 0.5;
   s.last = rel;
+  s.lastScroll = window.scrollY;
   const at = clamp((pointer.x - r.left) / Math.max(r.width, 1), 0.04, 0.96);
 
   if (s.grab) {
-    if (Math.abs(rel) > s.amp) release(s);
+    // a scroll carrying a held string away from a still cursor lets it go
+    if (Math.abs(rel) > s.amp || (scrolled && !pointer.moved)) release(s);
     else {
       s.grab.at = at;
       s.grab.d = rel;
     }
     return;
   }
-  if (last === null || last < 0 === rel < 0) return;
+  // Only a moving hand plays a string; lines scrolled past a resting cursor stay still.
+  if (last === null || scrolled || !pointer.moved || last < 0 === rel < 0) return;
 
   const speed = (rel - last) / dt;
-  if (pointer.fine && Math.abs(speed) < HOLD_SPEED) {
+  if (Math.abs(speed) < HOLD_SPEED) {
     s.x.fill(0);
     s.v.fill(0);
     s.grab = { at, d: rel };
@@ -208,34 +208,31 @@ const interact = (s: Str, dt: number) => {
   }
 };
 
-/** Touch screens: a line carried past the comb by the scroll rings where the thumb last was. */
-const comb = (s: Str, dt: number) => {
-  const r = s.host.getBoundingClientRect();
-  const rel = window.innerHeight * COMB - r.top;
-  const last = s.last;
-  s.last = rel;
-  if (last === null || last < 0 === rel < 0) return;
-  const speed = (rel - last) / dt;
-  if (Math.abs(speed) < COMB_SPEED) return;
-  const at = pointer.x >= r.left && pointer.x <= r.right ? (pointer.x - r.left) / Math.max(r.width, 1) : 0.3;
-  strum(s, clamp(at, 0.04, 0.96), clamp(Math.abs(speed) * STRUM_GAIN * 0.8, STRUM_MIN, s.amp * 0.7), speed < 0 ? -1 : 1);
-};
-
 const tick = (_time: number, deltaMs: number) => {
   const dt = clamp(deltaMs / 1000, 1 / 240, 1 / 30);
   const now = performance.now();
   let busy = now - lastInput < IDLE;
-  const playable = !transitionState.active;
-  const touch = coarse?.matches ?? false;
+  const playable = !transitionState.active && pointer.on;
+  let holding = false;
+  for (const s of all) if (s.grab) holding = true;
+
+  // Positions are sampled only while the hand moves (or holds a string), and all of them are read
+  // before any path is written, so layout is computed at most once a frame and never while scrolling.
+  const rects = new Map<Str, DOMRect>();
+  if (playable && (pointer.moved || holding)) {
+    for (const s of all) if (s.visible && s.interactive) rects.set(s, s.host.getBoundingClientRect());
+  }
 
   for (const s of all) {
     if (!s.visible) {
       if (s.live) settle(s);
       continue;
     }
-    if (s.interactive && playable) {
-      if (touch) comb(s, dt);
-      else interact(s, dt);
+    const r = rects.get(s);
+    if (r) interact(s, r, dt);
+    else if (!playable) {
+      s.last = null;
+      if (s.grab) release(s);
     }
     if (s.grab) {
       if (now - lastInput > HOLD_IDLE) release(s);
@@ -254,6 +251,7 @@ const tick = (_time: number, deltaMs: number) => {
       }
     }
   }
+  pointer.moved = false;
   if (!busy) stop();
 };
 
@@ -278,14 +276,12 @@ const install = () => {
   if (installed) return;
   installed = true;
 
-  coarse = window.matchMedia("(hover: none), (pointer: coarse)");
-
   window.addEventListener("pointermove", (e) => {
-    if (e.pointerType === "touch") return;
+    if (e.pointerType !== "mouse" && e.pointerType !== "pen") return;
     pointer.x = e.clientX;
     pointer.y = e.clientY;
     pointer.on = true;
-    pointer.fine = true;
+    pointer.moved = true;
     input();
   }, { passive: true });
   document.addEventListener("pointerout", (e) => {
@@ -293,19 +289,6 @@ const install = () => {
   });
   window.addEventListener("blur", () => (pointer.on = false));
 
-  // Touch: remember where the thumb is, so the comb strikes each line under it.
-  const touch = (e: TouchEvent) => {
-    const t = e.touches[0];
-    if (!t) return;
-    pointer.x = t.clientX;
-    pointer.y = t.clientY;
-    pointer.fine = false;
-    input();
-  };
-  window.addEventListener("touchstart", touch, { passive: true });
-  window.addEventListener("touchmove", touch, { passive: true });
-
-  window.addEventListener("scroll", input, { passive: true });
 
   io = new IntersectionObserver((entries) => {
     for (const entry of entries) {
@@ -355,6 +338,7 @@ export const registerString = (
     interactive: opts.interactive ?? true,
     grab: null,
     last: null,
+    lastScroll: 0,
   };
   layout(s);
   all.add(s);

@@ -106,6 +106,8 @@
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
   .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
   .lenis.lenis-stopped { overflow: hidden; }
+  /* While a wheel moves the page, nothing under the resting cursor reacts (see SmoothScroll). */
+  html.is-wheeling body { pointer-events: none; }
   /* Only block iframes while the page is in motion, so embedded videos stay tappable at rest. */
   .lenis.lenis-smooth.lenis-scrolling iframe { pointer-events: none; }
 
@@ -158,8 +160,8 @@
   }
   @media (prefers-reduced-motion: no-preference) and (min-height: 620px) {
     .hero-runway {
-      height: calc(100vh + 45vh);
-      height: calc(100svh + 45svh);
+      height: calc(100vh + 42vh);
+      height: calc(100svh + 42svh);
     }
     .hero-stage {
       position: sticky;
@@ -171,8 +173,8 @@
   }
   @media (prefers-reduced-motion: no-preference) and (min-height: 620px) and (min-width: 768px) {
     .hero-runway {
-      height: calc(100vh + 60vh);
-      height: calc(100svh + 60svh);
+      height: calc(100vh + 55vh);
+      height: calc(100svh + 55svh);
     }
   }
 

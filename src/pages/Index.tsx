@@ -4,6 +4,7 @@ import { Footer } from "@/components/layout/Footer";
 import { SectionTitle } from "@/components/ui-kit/SectionTitle";
 import { IndexRow } from "@/components/ui-kit/IndexRow";
 import { Button } from "@/components/ui-kit/Button";
+import { VideoEmbed } from "@/components/ui-kit/VideoEmbed";
 import { InkWords } from "@/components/motion/InkWords";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { Reveal } from "@/components/motion/Reveal";
@@ -102,16 +103,7 @@ const Index = () => {
               </Reveal>
             </div>
             <Reveal className="lg:col-span-8">
-              <div className="relative aspect-video w-full">
-                <iframe
-                  className="absolute inset-0 h-full w-full"
-                  src="https://www.youtube.com/embed/2z-Ztm9UHr4"
-                  title="Project Premier Video"
-                  loading="lazy"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
+              <VideoEmbed id="2z-Ztm9UHr4" title="Project Premier Video" />
             </Reveal>
           </div>
 
