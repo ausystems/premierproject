@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
+import { StringLine } from "@/components/strings/StringLine";
 
 export type ArticleSection = {
   heading: string;
@@ -33,8 +34,12 @@ export const Article = ({ title, intro, updated, sections }: Props) => (
             ))}
             {s.items && (
               <ul className="mt-5">
-                {s.items.map((it) => (
-                  <li key={it} className="hair-t py-3 text-body text-fg2 last:hair-b">{it}</li>
+                {s.items.map((it, i, list) => (
+                  <li key={it} className="relative py-3 text-body text-fg2">
+                    <StringLine edge="top" amp={9} />
+                    {i === list.length - 1 && <StringLine edge="bottom" amp={9} />}
+                    {it}
+                  </li>
                 ))}
               </ul>
             )}

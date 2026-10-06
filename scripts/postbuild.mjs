@@ -25,6 +25,8 @@ const shellFor = (routePath, route) => {
   html = setMeta(html, "name", "twitter:title", title);
   html = setMeta(html, "name", "twitter:description", route.description);
   html = html.replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`);
+  // Only Home shows the hero poster; elsewhere preloading it would spend bandwidth on nothing.
+  if (routePath !== "/") html = html.replace(/\s*<link rel="preload" href="\/hero-poster\.jpg"[^>]*>/, "");
   const ld = JSON.stringify(buildLd(routePath, route)).replace(/</g, "\\u003c");
   return html.replace("</head>", `    <script type="application/ld+json" id="ld-route">${ld}</script>\n  </head>`);
 };

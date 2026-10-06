@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Instagram, Mail } from "lucide-react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useLenis } from "@/lib/SmoothScroll";
+import { StringLine } from "@/components/strings/StringLine";
 
 const LINKS = [
   { to: "/", label: "Home" },
@@ -91,20 +92,23 @@ export const MenuOverlay = ({ open, onClose }: Props) => {
       </nav>
 
       <div ref={foot} className="wrap mt-auto pb-8 pt-10 opacity-0 sm:pb-10">
-        <ul className="hair-t flex flex-col gap-1 pt-5 text-ui sm:flex-row sm:gap-10">
-          <li>
-            <a href="mailto:info@projectpremier.org" className="tap gap-3 transition-opacity duration-300 hover:opacity-60">
-              <Mail aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
-              info@projectpremier.org
-            </a>
-          </li>
-          <li>
-            <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="tap gap-3 transition-opacity duration-300 hover:opacity-60">
-              <Instagram aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
-              @projectpremierx
-            </a>
-          </li>
-        </ul>
+        <div className="relative pt-5">
+          <StringLine edge="top" amp={10} />
+          <ul className="flex flex-col gap-1 text-ui sm:flex-row sm:gap-10">
+            <li>
+              <a href="mailto:info@projectpremier.org" className="tap gap-3 transition-opacity duration-300 hover:opacity-60">
+                <Mail aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
+                info@projectpremier.org
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/projectpremierx/" target="_blank" rel="noopener noreferrer" className="tap gap-3 transition-opacity duration-300 hover:opacity-60">
+                <Instagram aria-hidden="true" className="h-[18px] w-[18px] shrink-0" />
+                @projectpremierx
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );

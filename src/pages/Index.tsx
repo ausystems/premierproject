@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useRef, useState } from "react";
 import Hero from "@/components/home/Hero";
 import { Footer } from "@/components/layout/Footer";
 import { SectionTitle } from "@/components/ui-kit/SectionTitle";
@@ -8,6 +8,9 @@ import { InkWords } from "@/components/motion/InkWords";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitReveal } from "@/components/motion/SplitReveal";
+import { StringLine } from "@/components/strings/StringLine";
+import { useVoice } from "@/components/strings/moments";
+import type { StringHandle } from "@/lib/strings";
 import { useSeo } from "@/lib/seo";
 const heroPoster = "/hero-poster.jpg";
 import remixLogo from "@/assets/remix-project-logo.webp";
@@ -33,7 +36,10 @@ const CHANNELS = [
 
 const Index = () => {
   const [active, setActive] = useState<number | null>(null);
+  const voices = useRef<HTMLDivElement>(null);
+  const voiceString = useRef<StringHandle | null>(null);
   useSeo("/");
+  useVoice(voices, voiceString);
 
   return (
     <>
@@ -65,7 +71,7 @@ const Index = () => {
               Four pillars built to develop the next generation of creators, professionals, and leaders.
             </Reveal>
           </div>
-          <div className="mt-12 md:mt-14">
+          <div className="row-list mt-12 md:mt-14">
             {PROGRAMS.map((title, i) => (
               <IndexRow
                 key={title}
@@ -85,7 +91,8 @@ const Index = () => {
           </Suspense>
         </section>
 
-        {/* Voices: the film beside its heading, centred on each other; then the three quotes as one and two */}
+        {/* Voices: the film beside its heading, centred on each other; then a string that speaks as the
+            quotes arrive, and the three quotes as one and two */}
         <section data-theme="ink" className="wrap py-section">
           <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
             <div className="lg:col-span-4">
@@ -108,7 +115,8 @@ const Index = () => {
             </Reveal>
           </div>
 
-          <div className="mt-16 grid gap-12 md:mt-24 md:grid-cols-12 md:gap-12">
+          <div ref={voices} className="relative mt-14 grid gap-12 pt-14 md:mt-20 md:grid-cols-12 md:gap-12 md:pt-20">
+            <StringLine edge="top" amp={18} handle={voiceString} />
             <figure className="md:col-span-7">
               <SplitReveal as="blockquote" className="max-w-[30ch] text-statement">{QUOTES[0]}</SplitReveal>
               <figcaption className="mt-5 text-sm text-grey">Youth Voice</figcaption>

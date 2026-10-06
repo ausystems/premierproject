@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import type { Texture, WebGLRenderer } from "three";
 import { gsap, isTouch, prefersReducedMotion } from "@/lib/gsap";
 
 type Props = {
@@ -70,10 +71,10 @@ export const RowFollower = ({ active, images }: Props) => {
 
     let disposed = false;
     let raf = 0;
-    let renderer: import("three").WebGLRenderer | null = null;
+    let renderer: WebGLRenderer | null = null;
 
     (async () => {
-      const THREE = await import("three");
+      const THREE = await import("@/lib/three");
       if (disposed) return;
 
       const W = window.innerWidth, H = window.innerHeight;
@@ -91,7 +92,7 @@ export const RowFollower = ({ active, images }: Props) => {
       const PW = 260, PH = 340;
       const loader = new THREE.TextureLoader();
       const textures = await Promise.all(
-        images.map((src) => new Promise<import("three").Texture>((res) => loader.load(src, (t) => { t.colorSpace = THREE.SRGBColorSpace; res(t); }, undefined, () => res(new THREE.Texture()))))
+        images.map((src) => new Promise<Texture>((res) => loader.load(src, (t) => { t.colorSpace = THREE.SRGBColorSpace; res(t); }, undefined, () => res(new THREE.Texture()))))
       );
       if (disposed) return;
 
@@ -165,6 +166,7 @@ export const RowFollower = ({ active, images }: Props) => {
         mesh.geometry.dispose();
         textures.forEach((t) => t.dispose());
         renderer?.dispose();
+        renderer?.forceContextLoss();
         renderer?.domElement.remove();
       };
       (state.current as { cleanup?: () => void }).cleanup = cleanup;

@@ -14,6 +14,7 @@ type Props = {
 
 /**
  * Line-by-line mask reveal. Text is split only after fonts are ready so line breaks are final;
+ * a page headline (h1) also inks in, its weight settling from light to its own as the lines rise;
  * the split is reverted after the reveal so the DOM returns to plain text (resize-safe, a11y-safe).
  * Nothing plays under the page transition curtain: triggers are armed once the page is revealed.
  * Content is never left hidden: a fallback timer plays the reveal if no trigger ever fires.
@@ -46,10 +47,12 @@ export const SplitReveal = ({
 
     document.fonts.ready.then(() => {
       if (cancelled) return;
+      const weight = parseFloat(getComputedStyle(el).fontWeight) || 450;
+      const ink = as === "h1";
       split = new SplitText(el, { type: "lines", mask: "lines", linesClass: "split-line" });
       const lines = split.lines;
-      gsap.set(lines, { yPercent: 110 });
-      const vars = { yPercent: 0, duration: DURATION.base, ease: EASE_REVEAL, stagger, delay, onComplete: revert };
+      gsap.set(lines, { yPercent: 110, ...(ink ? { fontWeight: Math.min(300, weight) } : {}) });
+      const vars = { yPercent: 0, ...(ink ? { fontWeight: weight } : {}), duration: DURATION.base, ease: EASE_REVEAL, stagger, delay, onComplete: revert };
 
       cancelReady = whenPageReady(() => {
         if (cancelled) return;
@@ -77,7 +80,7 @@ export const SplitReveal = ({
       tween?.kill();
       revert();
     };
-  }, [trigger, delay, stagger]);
+  }, [trigger, delay, stagger, as]);
 
   return createElement(as, { ref, className, id }, children);
 };

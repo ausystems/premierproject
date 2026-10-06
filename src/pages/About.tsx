@@ -5,6 +5,8 @@ import { Button } from "@/components/ui-kit/Button";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { InkWords } from "@/components/motion/InkWords";
 import { Reveal } from "@/components/motion/Reveal";
+import { StringLine } from "@/components/strings/StringLine";
+import { useChord } from "@/components/strings/moments";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { useSeo } from "@/lib/seo";
 import remixLogo from "@/assets/remix-project-logo.webp";
@@ -42,7 +44,9 @@ const ScrollPortrait = () => {
 };
 
 const About = () => {
+  const values = useRef<HTMLDivElement>(null);
   useSeo("/about");
+  useChord(values, { stagger: 0.08, amp: 10, at: 0.16, spread: 0.07 });
 
   return (
     <>
@@ -79,9 +83,11 @@ const About = () => {
 
         <section data-theme="ink" className="wrap py-section">
           <SectionTitle>What we stand for.</SectionTitle>
-          <div className="mt-12 md:mt-14">
+          <div ref={values} className="mt-12 md:mt-14">
             {ROWS.map((r, i) => (
-              <Reveal key={r.title} as="article" className={`grid gap-4 hair-t py-7 md:grid-cols-12 md:py-9 ${i === ROWS.length - 1 ? "hair-b" : ""}`}>
+              <Reveal key={r.title} as="article" className="relative grid gap-4 py-7 md:grid-cols-12 md:py-9">
+                <StringLine edge="top" amp={18} />
+                {i === ROWS.length - 1 && <StringLine edge="bottom" amp={18} />}
                 <h3 className="text-h3 md:col-span-5">{r.title}</h3>
                 <p className="text-body text-fg2 md:col-span-6 md:col-start-7">{r.body}</p>
               </Reveal>

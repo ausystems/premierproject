@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui-kit/Button";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
+import { StringLine } from "@/components/strings/StringLine";
 import { useSeo } from "@/lib/seo";
 import { cn } from "@/lib/utils";
 
@@ -218,8 +219,10 @@ const Referral = () => {
               By completing this form, you acknowledge and consent to the collection, use, and disclosure of the provided personal information for the following purposes:
             </Reveal>
             <ul className="mt-8">
-              {PURPOSES.map((p, i) => (
-                <Reveal key={i} as="li" className="hair-t py-4 text-body text-fg2 last:hair-b">
+              {PURPOSES.map((p, i, list) => (
+                <Reveal key={i} as="li" className="relative py-4 text-body text-fg2">
+                  <StringLine edge="top" amp={10} />
+                  {i === list.length - 1 && <StringLine edge="bottom" amp={10} />}
                   {p}
                 </Reveal>
               ))}

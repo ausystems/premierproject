@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { Footer } from "@/components/layout/Footer";
 import { SectionTitle } from "@/components/ui-kit/SectionTitle";
 import { Button } from "@/components/ui-kit/Button";
 import { Reveal } from "@/components/motion/Reveal";
 import { ImageReveal } from "@/components/motion/ImageReveal";
 import { useSeo } from "@/lib/seo";
+import { StringLine } from "@/components/strings/StringLine";
+import type { StringHandle } from "@/lib/strings";
 
 const EMAIL = "info@projectpremier.org";
 const MAP = "/map.webp";
@@ -19,6 +21,7 @@ const CHANNELS = [
 
 const Contact = () => {
   const [copied, setCopied] = useState(false);
+  const underline = useRef<StringHandle | null>(null);
   useSeo("/contact");
 
   useEffect(() => {
@@ -27,10 +30,13 @@ const Contact = () => {
     return () => window.clearTimeout(id);
   }, [copied]);
 
-  const copy = async () => {
+  const copy = async (e: MouseEvent<HTMLButtonElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const at = e.clientX ? (e.clientX - r.left) / r.width : 0.5;
     try {
       await navigator.clipboard.writeText(EMAIL);
       setCopied(true);
+      underline.current?.pluck(at, 16, 1);
     } catch {
       window.location.href = `mailto:${EMAIL}`;
     }
@@ -48,7 +54,10 @@ const Contact = () => {
               aria-live="polite"
               className="block text-left font-sans text-[clamp(1.75rem,6vw,6.5rem)] font-[450] leading-[0.95] tracking-[-0.04em] [overflow-wrap:anywhere] transition-colors duration-300 hover:text-fg2"
             >
-              <span className="block">{EMAIL}</span>
+              <span className="relative block pb-4">
+                {EMAIL}
+                <StringLine edge="bottom" amp={14} handle={underline} />
+              </span>
               <span className="mt-4 block text-sm font-normal tracking-normal text-grey">{copied ? "Copied to clipboard" : "Click to copy"}</span>
             </button>
           </h1>
