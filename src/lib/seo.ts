@@ -1,17 +1,9 @@
 import { useEffect } from "react";
 import routes from "@/seo/routes.json";
-import { buildLd, pageTitle, SITE_URL } from "@/seo/ld";
+import { buildLd, NOT_FOUND, pageTitle, SITE_URL } from "@/seo/ld";
 
 type Route = { name: string; title: string; description: string; type: string; priority: string };
 const ROUTES = routes as Record<string, Route>;
-
-const NOT_FOUND: Route = {
-  name: "Page not found",
-  title: "Page not found",
-  description: "The page you were looking for does not exist.",
-  type: "WebPage",
-  priority: "0",
-};
 
 const upsertMeta = (attr: "name" | "property", key: string, content: string) => {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);

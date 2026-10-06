@@ -26,6 +26,15 @@ const VIDEOS = {
 /**
  * @param {{ title: string }} route
  */
+/** Metadata for any path that is not a page: the designed 404, never indexed. */
+export const NOT_FOUND = {
+  name: "Page not found",
+  title: "Page not found",
+  description: "The page you were looking for does not exist.",
+  type: "WebPage",
+  priority: "0",
+};
+
 export function pageTitle(route) {
   return route.title ? `${route.title} | ${SITE_NAME}` : HOME_TITLE;
 }

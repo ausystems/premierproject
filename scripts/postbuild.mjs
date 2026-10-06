@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { buildLd, pageTitle, SITE_URL } from "../src/seo/ld.js";
+import { buildLd, NOT_FOUND, pageTitle, SITE_URL } from "../src/seo/ld.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const dist = path.resolve(here, "..", "dist");
@@ -38,6 +38,22 @@ for (const [routePath, route] of Object.entries(routes)) {
   written += 1;
 }
 
+// Unknown URLs: Vercel answers with dist/404.html and a real 404 status. The app boots on it and shows
+// the designed not-found page; crawlers that do not run JavaScript get the same noindex metadata.
+{
+  const title = pageTitle(NOT_FOUND);
+  let html = base.replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`);
+  html = setMeta(html, "name", "description", NOT_FOUND.description);
+  html = setMeta(html, "name", "robots", "noindex, nofollow");
+  html = setMeta(html, "property", "og:title", title);
+  html = setMeta(html, "property", "og:description", NOT_FOUND.description);
+  html = setMeta(html, "name", "twitter:title", title);
+  html = setMeta(html, "name", "twitter:description", NOT_FOUND.description);
+  html = html.replace(/\s*<link rel="canonical"[^>]*>/, "").replace(/\s*<meta property="og:url"[^>]*>/, "");
+  html = html.replace(/\s*<link rel="preload" href="\/hero-poster\.jpg"[^>]*>/, "");
+  fs.writeFileSync(path.join(dist, "404.html"), html);
+}
+
 const today = new Date().toISOString().slice(0, 10);
 const urls = Object.entries(routes)
   .map(([p, r]) => `  <url><loc>${SITE_URL}${p}</loc><lastmod>${today}</lastmod><changefreq>monthly</changefreq><priority>${r.priority}</priority></url>`)
@@ -47,4 +63,4 @@ fs.writeFileSync(
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
 );
 
-console.log(`postbuild: ${written} route shells, sitemap.xml with ${Object.keys(routes).length} urls (lastmod ${today})`);
+console.log(`postbuild: ${written} route shells + 404.html, sitemap.xml with ${Object.keys(routes).length} urls (lastmod ${today})`);
