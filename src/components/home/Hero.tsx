@@ -6,7 +6,9 @@ import { StringLine } from "@/components/strings/StringLine";
 import { gsap } from "@/lib/gsap";
 import type { StringHandle } from "@/lib/strings";
 import { cn } from "@/lib/utils";
-const heroPoster = "/hero-poster.jpg";
+/** Frame 0 of the film: sharp WebP at three widths, and a JPEG for browsers without WebP. */
+const POSTER = "/project-premier-recording-studio-guitars";
+const POSTER_SRCSET = [640, 1280, 1920].map((w) => `${POSTER}-${w}.webp ${w}w`).join(", ");
 import heroVideo1080 from "@/assets/hero-video-1080.mp4";
 import heroVideo720 from "@/assets/hero-video-720.mp4";
 
@@ -17,7 +19,7 @@ const STRIKE = 0.66;
 
 /**
  * Background video (unchanged in substance)
- * - The poster is frame 0 of the clip, so the hand-off from image to video is invisible.
+ * - The still beneath it is frame 0 of the clip, so the hand-off from image to video is invisible.
  * - The rendition is chosen once on mount. Both are 16:9, so a later resize or an
  *   orientation change can never alter the framing and the source is never swapped.
  * - Playback is suspended whenever the hero scrolls out of view or the tab is hidden.
@@ -150,16 +152,19 @@ const Hero = () => {
       <div ref={stageRef} className="hero-stage overflow-hidden bg-bg">
         <div ref={mediaRef} className="absolute inset-0 z-0">
           <div ref={lensRef} className="absolute inset-0">
-            <img
-              src={heroPoster}
-              alt="Guitars on stands inside the Project Premier recording studio"
-              width={1920}
-              height={1080}
-              className="absolute inset-0 h-full w-full object-cover object-center"
-              loading="eager"
-              fetchPriority="high"
-              decoding="async"
-            />
+            <picture>
+              <source type="image/webp" srcSet={POSTER_SRCSET} sizes="100vw" />
+              <img
+                src={`${POSTER}.jpg`}
+                alt="Guitars on stands inside the Project Premier recording studio"
+                width={1920}
+                height={1080}
+                className="absolute inset-0 h-full w-full object-cover object-center"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+              />
+            </picture>
             {videoSrc && (
               <video
                 ref={videoRef}
@@ -168,7 +173,6 @@ const Hero = () => {
                   hasRenderedFrame ? "opacity-100" : "opacity-0"
                 )}
                 src={videoSrc}
-                poster={heroPoster}
                 autoPlay
                 muted
                 loop

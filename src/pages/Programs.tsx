@@ -7,6 +7,7 @@ import { InkWords } from "@/components/motion/InkWords";
 import { Reveal } from "@/components/motion/Reveal";
 import { StringLine } from "@/components/strings/StringLine";
 import { useSeo } from "@/lib/seo";
+import { VIDEOS } from "@/seo/ld";
 import { StringField } from "@/components/webgl/StringField";
 
 const PROGRAMS = [
@@ -29,7 +30,7 @@ const Programs = () => {
               Hands-on programs that <em>shape</em> careers.
             </SplitReveal>
             <Reveal trigger="load" delay={0.8} className="mt-8 max-w-prose text-body text-fg2 md:text-[1.125rem]">
-              We provide immersive programs designed to inspire, educate, and empower youth through music, recording arts, and life skills, turning passion into a sustainable career.
+              We provide immersive programs designed to inspire, educate, and empower youth across the Greater Toronto Area through music, recording arts, and life skills, turning passion into a sustainable career.
             </Reveal>
           </div>
         </section>
@@ -58,6 +59,24 @@ const Programs = () => {
           </div>
         </section>
 
+        {/* Where and when: the studio, the days, and how a young person joins */}
+        <section data-theme="paper" className="wrap grid gap-8 pb-section md:grid-cols-12">
+          <div className="md:col-span-5">
+            <SectionTitle>Where and when.</SectionTitle>
+          </div>
+          <div className="md:col-span-6 md:col-start-7">
+            <Reveal className="max-w-[34ch] text-statement">
+              Sessions run at 130 Queens Quay East on the Toronto waterfront, on Fridays from 5 PM to 9 PM and Saturdays from 12 PM to 5 PM.
+            </Reveal>
+            <Reveal className="mt-6 max-w-prose text-body text-fg2">
+              Youth workers, schools, agencies and families can refer a young person through our referral form. Young people are welcome to reach out to us directly too.
+            </Reveal>
+            <Reveal className="mt-8">
+              <Button variant="link" to="/blog/how-to-refer-a-young-person-to-project-premier">How Referrals Work</Button>
+            </Reveal>
+          </div>
+        </section>
+
         {/* Celebration: the film beside its heading, centred on each other */}
         <section data-theme="ink" className="wrap py-section">
           <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
@@ -72,7 +91,7 @@ const Programs = () => {
               </Reveal>
             </div>
             <Reveal className="lg:col-span-8">
-              <VideoEmbed id="xUKiKbnl62c" title="Premier Project End of Year Celebration" />
+              <VideoEmbed id={VIDEOS.celebration.id} title={VIDEOS.celebration.name} />
             </Reveal>
           </div>
         </section>

@@ -3,6 +3,35 @@
   "framework": "vite",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/hero-poster.jpg",
+      "destination": "/project-premier-recording-studio-guitars.jpg",
+      "permanent": true
+    },
+    {
+      "source": "/community.webp",
+      "destination": "/project-premier-youth-community.webp",
+      "permanent": true
+    },
+    {
+      "source": "/map.webp",
+      "destination": "/project-premier-map-130-queens-quay-east-toronto.webp",
+      "permanent": true
+    },
+    {
+      "source": "/logo-nav.png",
+      "destination": "/project-premier-logo.png",
+      "permanent": true
+    },
+    {
+      "source": "/lovable-uploads/4bf7339d-93aa-401c-960e-c32ebe22e59a.png",
+      "destination": "/project-premier-logo.png",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
@@ -41,15 +70,6 @@
       ]
     },
     {
-      "source": "/lovable-uploads/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=86400, stale-while-revalidate=604800"
-        }
-      ]
-    },
-    {
       "source": "/fonts/(.*)",
       "headers": [
         {
@@ -67,6 +87,5 @@
         }
       ]
     }
-  ],
-  "cleanUrls": true
+  ]
 }

@@ -8,6 +8,9 @@ export default defineConfig({
     port: 8080,
   },
   plugins: [react()],
+  // The build-time renderer (src/entry-server.tsx) bundles its dependencies, so Node never has to
+  // resolve browser-oriented packages on its own.
+  ssr: { noExternal: true },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

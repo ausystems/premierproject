@@ -12,7 +12,7 @@ import { useSeo } from "@/lib/seo";
 import remixLogo from "@/assets/remix-project-logo.webp";
 import trilliumLogo from "@/assets/ontario-trillium-logo.webp";
 
-const COMMUNITY = "/community.webp";
+const COMMUNITY = "/project-premier-youth-community.webp";
 
 // Five rows, never three.
 const ROWS = [
@@ -38,7 +38,7 @@ const ScrollPortrait = () => {
   }, []);
   return (
     <div ref={frame} className="relative aspect-[4/5] w-full overflow-hidden">
-      <img ref={img} src={COMMUNITY} alt="Project Premier community" width={1080} height={1350} loading="lazy" decoding="async" sizes="(min-width: 768px) 42vw, 100vw" className="still h-full w-full object-cover will-change-transform" />
+      <img ref={img} src={COMMUNITY} alt="Group photo of young creators from the Project Premier community" width={1080} height={1350} loading="lazy" decoding="async" sizes="(min-width: 768px) 42vw, 100vw" className="h-full w-full object-cover will-change-transform" />
     </div>
   );
 };
@@ -102,8 +102,8 @@ const About = () => {
               <Button variant="link" to="/programs" className="mt-4">Explore Our Programs</Button>
             </div>
             <div className="flex flex-wrap items-center gap-8 md:col-span-6 md:col-start-7 md:justify-end md:gap-12 lg:gap-16">
-              <img src={remixLogo} alt="The Remix Project logo" width={1462} height={622} loading="lazy" className="still h-20 w-auto md:h-24 lg:h-28" />
-              <img src={trilliumLogo} alt="Ontario Trillium Foundation logo" width={1214} height={878} loading="lazy" className="still h-20 w-auto md:h-24 lg:h-28" />
+              <img src={remixLogo} alt="The Remix Project logo" width={1486} height={713} loading="lazy" className="h-20 w-auto md:h-24 lg:h-28" />
+              <img src={trilliumLogo} alt="Ontario Trillium Foundation logo" width={1261} height={932} loading="lazy" className="h-20 w-auto md:h-24 lg:h-28" />
             </div>
           </Reveal>
         </section>

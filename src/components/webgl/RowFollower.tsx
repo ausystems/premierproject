@@ -5,7 +5,7 @@ import { gsap, isTouch, prefersReducedMotion } from "@/lib/gsap";
 type Props = {
   /** Index of the hovered row, or null. */
   active: number | null;
-  /** One still per row (they may repeat). Rendered as luminance only. */
+  /** One picture per row (they may repeat), shown in its own colours. */
   images: string[];
 };
 
@@ -14,8 +14,9 @@ const VERT = /* glsl */ `
   void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }
 `;
 
-// Luminance-only output keeps the monochrome rule inside the GPU path. Displacement peaks
-// mid-reveal (p * (1 - p)), a soft inset mask opens with progress, one octave of grain on top.
+// The picture keeps its own colours: the texture is sampled as stored and written out as is.
+// Displacement peaks mid-reveal (p * (1 - p)), a soft inset mask opens with progress, and a breath
+// of grain, equal on every channel, sits on top.
 const FRAG = /* glsl */ `
   precision highp float;
   uniform sampler2D uMap;
@@ -46,20 +47,19 @@ const FRAG = /* glsl */ `
     uv += (n - 0.5) * 0.12 * bell;
 
     vec4 c = texture2D(uMap, uv);
-    float l = dot(c.rgb, vec3(0.299, 0.587, 0.114));
-    l += (hash(vUv * 900.0 + uTime) - 0.5) * 0.06;
+    vec3 col = c.rgb + (hash(vUv * 900.0 + uTime) - 0.5) * 0.04;
 
     float inset = mix(0.5, 0.0, smoothstep(0.0, 1.0, uProgress));
     vec2 d = abs(vUv - 0.5);
     float mask = 1.0 - smoothstep(0.5 - inset - 0.01, 0.5 - inset, max(d.x, d.y));
-    gl_FragColor = vec4(vec3(l), mask * uProgress);
+    gl_FragColor = vec4(col, mask * uProgress);
   }
 `;
 
 /**
- * The site's one WebGL moment: a monochrome still follows the cursor over the program rows.
+ * The site's one WebGL moment: a picture follows the cursor over the program rows.
  * Gated to fine pointers at 1024px and up with motion allowed; three.js is loaded on demand and the
- * loop stops whenever nothing is hovered. Touch gets the same still inline under each row instead.
+ * loop stops whenever nothing is hovered. Touch gets the same picture inline under each row instead.
  */
 export const RowFollower = ({ active, images }: Props) => {
   const host = useRef<HTMLDivElement>(null);
@@ -92,7 +92,7 @@ export const RowFollower = ({ active, images }: Props) => {
       const PW = 260, PH = 340;
       const loader = new THREE.TextureLoader();
       const textures = await Promise.all(
-        images.map((src) => new Promise<Texture>((res) => loader.load(src, (t) => { t.colorSpace = THREE.SRGBColorSpace; res(t); }, undefined, () => res(new THREE.Texture()))))
+        images.map((src) => new Promise<Texture>((res) => loader.load(src, res, undefined, () => res(new THREE.Texture()))))
       );
       if (disposed) return;
 

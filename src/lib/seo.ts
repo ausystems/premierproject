@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import routes from "@/seo/routes.json";
-import { buildLd, NOT_FOUND, pageTitle, SITE_URL } from "@/seo/ld";
+import { PAGES, isKnownPath, type Page } from "@/seo/pages";
+import { buildLd, isoDate, NOT_FOUND, shareImageFor, SITE_URL } from "@/seo/ld";
 
-type Route = { name: string; title: string; description: string; type: string; priority: string };
-const ROUTES = routes as Record<string, Route>;
+/** Indexable pages: allow large image previews and full snippets in search results and AI answers. */
+export const ROBOTS = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
 
 const upsertMeta = (attr: "name" | "property", key: string, content: string) => {
   let el = document.head.querySelector<HTMLMetaElement>(`meta[${attr}="${key}"]`);
@@ -14,6 +14,9 @@ const upsertMeta = (attr: "name" | "property", key: string, content: string) => 
   }
   el.setAttribute("content", content);
 };
+
+const removeMeta = (attr: "name" | "property", key: string) =>
+  document.head.querySelector(`meta[${attr}="${key}"]`)?.remove();
 
 const upsertLink = (rel: string, href: string) => {
   let el = document.head.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
@@ -26,26 +29,43 @@ const upsertLink = (rel: string, href: string) => {
 };
 
 /**
- * Per-route document metadata and structured data, kept in step with the static shells that
- * scripts/postbuild.mjs writes from the same routes.json and JSON-LD builder.
- * Unknown paths (the 404 page) are marked noindex.
+ * Per-page document metadata and structured data, kept in step with the pre-rendered pages that
+ * scripts/postbuild.mjs writes from the same page registry and JSON-LD builder.
+ * Unknown paths (the 404 page) are marked noindex and carry no canonical URL.
  */
 export const useSeo = (path: string) => {
   useEffect(() => {
-    const known = Object.prototype.hasOwnProperty.call(ROUTES, path);
-    const route = known ? ROUTES[path] : NOT_FOUND;
-    const title = pageTitle(route);
+    const known = isKnownPath(path);
+    const page: Page = known ? PAGES[path] : NOT_FOUND;
     const url = `${SITE_URL}${path}`;
 
-    document.title = title;
-    upsertMeta("name", "description", route.description);
-    upsertMeta("name", "robots", known ? "index, follow, max-image-preview:large" : "noindex, nofollow");
-    upsertMeta("property", "og:title", title);
-    upsertMeta("property", "og:description", route.description);
-    upsertMeta("property", "og:url", url);
-    upsertMeta("name", "twitter:title", title);
-    upsertMeta("name", "twitter:description", route.description);
-    upsertLink("canonical", url);
+    document.title = page.title;
+    upsertMeta("name", "description", page.description);
+    upsertMeta("name", "robots", known ? ROBOTS : "noindex, nofollow");
+    upsertMeta("property", "og:title", page.title);
+    upsertMeta("property", "og:description", page.description);
+    upsertMeta("property", "og:type", page.post ? "article" : "website");
+    upsertMeta("name", "twitter:title", page.title);
+    upsertMeta("name", "twitter:description", page.description);
+    const image = shareImageFor(page);
+    upsertMeta("property", "og:image", image.url);
+    upsertMeta("property", "og:image:alt", image.alt);
+    upsertMeta("name", "twitter:image", image.url);
+    upsertMeta("name", "twitter:image:alt", image.alt);
+    if (page.post) {
+      upsertMeta("property", "article:published_time", isoDate(page.post.date));
+      upsertMeta("property", "article:modified_time", isoDate(page.post.updated));
+    } else {
+      removeMeta("property", "article:published_time");
+      removeMeta("property", "article:modified_time");
+    }
+    if (known) {
+      upsertMeta("property", "og:url", url);
+      upsertLink("canonical", url);
+    } else {
+      removeMeta("property", "og:url");
+      document.head.querySelector('link[rel="canonical"]')?.remove();
+    }
 
     let ld = document.getElementById("ld-route") as HTMLScriptElement | null;
     if (!ld) {
@@ -54,6 +74,6 @@ export const useSeo = (path: string) => {
       ld.id = "ld-route";
       document.head.appendChild(ld);
     }
-    ld.textContent = known ? JSON.stringify(buildLd(path, route)) : "";
+    ld.textContent = known ? JSON.stringify(buildLd(path, page)) : "";
   }, [path]);
 };

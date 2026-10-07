@@ -1,5 +1,7 @@
-import { createElement, useLayoutEffect, useRef, type ElementType, type ReactNode } from "react";
+import { createElement, useRef, type CSSProperties, type ElementType, type ReactNode } from "react";
+import { useIsoLayoutEffect } from "@/lib/useIsoLayoutEffect";
 import { gsap, SplitText, EASE_REVEAL, DURATION, STAGGER, prefersReducedMotion, reachableStart, revealOverdue, whenPageReady } from "@/lib/gsap";
+import { isServerFirstPaint } from "@/lib/ssr";
 
 type Props = {
   as?: ElementType;
@@ -19,6 +21,7 @@ type Props = {
  * Nothing plays under the page transition curtain: triggers are armed once the page is revealed.
  * The block is hidden before the first paint and shown again the moment its lines are parked below
  * their masks, so a headline never flashes and then vanishes before it rises.
+ * On a server-rendered first page, a load entrance runs in CSS from the first frame instead (index.css).
  * Content is never left hidden: a fallback timer plays the reveal if no trigger ever fires.
  */
 export const SplitReveal = ({
@@ -32,9 +35,10 @@ export const SplitReveal = ({
 }: Props) => {
   const ref = useRef<HTMLElement>(null);
 
-  useLayoutEffect(() => {
+  useIsoLayoutEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
+    if (trigger === "load" && isServerFirstPaint()) return;
 
     gsap.set(el, { autoAlpha: 0 });
     // Insurance for the hidden starting state, should the split never happen.
@@ -55,7 +59,8 @@ export const SplitReveal = ({
       if (cancelled) return;
       const weight = parseFloat(getComputedStyle(el).fontWeight) || 450;
       const ink = as === "h1";
-      split = new SplitText(el, { type: "lines", mask: "lines", linesClass: "split-line" });
+      // aria "none": the text stays readable as it is; SplitText's own labels are not valid on paragraphs.
+      split = new SplitText(el, { type: "lines", mask: "lines", linesClass: "split-line", aria: "none" });
       const lines = split.lines;
       gsap.set(lines, { yPercent: 110, ...(ink ? { fontWeight: Math.min(300, weight) } : {}) });
       gsap.set(el, { autoAlpha: 1 });
@@ -92,5 +97,9 @@ export const SplitReveal = ({
     };
   }, [trigger, delay, stagger, as]);
 
-  return createElement(as, { ref, className, id }, children);
+  return createElement(
+    as,
+    { ref, className, id, "data-split": trigger, style: trigger === "load" ? ({ "--reveal-delay": `${delay}s` } as CSSProperties) : undefined },
+    children
+  );
 };

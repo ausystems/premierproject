@@ -4,12 +4,14 @@ import { Button } from "@/components/ui-kit/Button";
 import { MenuOverlay } from "@/components/layout/MenuOverlay";
 import { cn } from "@/lib/utils";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
+import { isServerFirstPaint } from "@/lib/ssr";
 
-const LOGO = "/logo-nav.png";
+const LOGO = "/project-premier-logo.png";
 
 const LINKS = [
   { to: "/about", label: "About" },
   { to: "/programs", label: "Programs" },
+  { to: "/blog", label: "Blog" },
   { to: "/contact", label: "Contact" },
 ];
 
@@ -24,7 +26,7 @@ export const Nav = () => {
   // First paint: the bar settles in from above once, after the hero copy has begun its reveal.
   useEffect(() => {
     const el = bar.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el || prefersReducedMotion() || isServerFirstPaint()) return;
     const tween = gsap.fromTo(el, { yPercent: -100, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.9, ease: "power3.out", delay: 0.15 });
     return () => { tween.kill(); };
   }, []);

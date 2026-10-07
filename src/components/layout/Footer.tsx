@@ -7,12 +7,13 @@ import { StringLine } from "@/components/strings/StringLine";
 import { useLastNote } from "@/components/strings/moments";
 import type { StringHandle } from "@/lib/strings";
 
-const LOGO = "/logo-nav.png";
+const LOGO = "/project-premier-logo.png";
 
 const LINKS = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/programs", label: "Programs" },
+  { to: "/blog", label: "Blog" },
   { to: "/contact", label: "Contact" },
   { to: "/privacy", label: "Privacy" },
   { to: "/terms", label: "Terms" },

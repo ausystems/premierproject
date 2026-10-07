@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 
 type Props = { id: string; title: string };
 
-const YT = "https://www.youtube.com";
+/** The privacy-enhanced player: YouTube sets no cookies until the visitor plays the film. */
+const YT = "https://www.youtube-nocookie.com";
 
 /**
  * A YouTube film. With smooth scrolling and a mouse, a cross-origin iframe swallows the wheel whenever

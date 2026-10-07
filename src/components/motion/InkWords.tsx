@@ -1,4 +1,5 @@
-import { createElement, useLayoutEffect, useRef, type ElementType, type ReactNode } from "react";
+import { createElement, useRef, type ElementType, type ReactNode } from "react";
+import { useIsoLayoutEffect } from "@/lib/useIsoLayoutEffect";
 import { gsap, SplitText, prefersReducedMotion } from "@/lib/gsap";
 
 type Props = {
@@ -16,7 +17,7 @@ type Props = {
 export const InkWords = ({ as = "p", children, className }: Props) => {
   const ref = useRef<HTMLElement>(null);
 
-  useLayoutEffect(() => {
+  useIsoLayoutEffect(() => {
     const el = ref.current;
     if (!el || prefersReducedMotion()) return;
 
@@ -30,7 +31,7 @@ export const InkWords = ({ as = "p", children, className }: Props) => {
 
     document.fonts.ready.then(() => {
       if (cancelled) return;
-      split = new SplitText(el, { type: "words", wordsClass: "ink-word" });
+      split = new SplitText(el, { type: "words", wordsClass: "ink-word", aria: "none" });
       tween = gsap.fromTo(
         split.words,
         { color: grey },
@@ -52,5 +53,5 @@ export const InkWords = ({ as = "p", children, className }: Props) => {
     };
   }, []);
 
-  return createElement(as, { ref, className }, children);
+  return createElement(as, { ref, className, "data-ink": "" }, children);
 };

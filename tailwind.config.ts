@@ -12,7 +12,7 @@ export default {
     container: { center: true, padding: "2rem" },
     extend: {
       fontFamily: {
-        sans: ['"Inter Tight"', "Inter", '"Helvetica Neue"', "Arial", "sans-serif"],
+        sans: ['"Inter Tight"', '"Inter Tight Fallback"', '"Helvetica Neue"', "Arial", "sans-serif"],
         mono: ['"Geist Mono"', '"JetBrains Mono"', "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       colors: {

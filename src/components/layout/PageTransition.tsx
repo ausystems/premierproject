@@ -2,8 +2,9 @@ import { Suspense, startTransition, useCallback, useEffect, useRef, useState, ty
 import { Routes, useLocation, type Location } from "react-router-dom";
 import { gsap, ScrollTrigger, EASE_REVEAL, prefersReducedMotion, transitionState } from "@/lib/gsap";
 import { useLenis } from "@/lib/SmoothScroll";
+import { endServerFirstPaint } from "@/lib/ssr";
 
-const LOGO = "/logo-nav.png";
+const LOGO = "/project-premier-logo.png";
 const CURTAIN_IN = 0.45;
 const LOGO_IN = 0.4;
 const HOLD = 0.08;
@@ -54,6 +55,8 @@ export const PageTransition = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const run = useCallback(async (target: Location) => {
+    // From here on pages mount in the browser, so the JavaScript entrances take over from the CSS ones.
+    endServerFirstPaint();
     const el = curtain.current;
     const mark = logo.current;
     if (!el || !mark || prefersReducedMotion()) {

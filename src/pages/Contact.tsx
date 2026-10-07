@@ -9,7 +9,7 @@ import { StringLine } from "@/components/strings/StringLine";
 import type { StringHandle } from "@/lib/strings";
 
 const EMAIL = "info@projectpremier.org";
-const MAP = "/map.webp";
+const MAP = "/project-premier-map-130-queens-quay-east-toronto.webp";
 const MAPS_URL = "https://maps.google.com/?q=130+Queens+Quay+East,+Toronto,+ON,+Canada";
 
 const CHANNELS = [
@@ -30,7 +30,7 @@ const Contact = () => {
     return () => window.clearTimeout(id);
   }, [copied]);
 
-  const copy = async (e: MouseEvent<HTMLButtonElement>) => {
+  const copy = async (e: MouseEvent<HTMLElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     const at = e.clientX ? (e.clientX - r.left) / r.width : 0.5;
     try {
@@ -51,16 +51,20 @@ const Contact = () => {
             <button
               type="button"
               onClick={copy}
-              aria-live="polite"
+              aria-describedby="copy-hint"
               className="block text-left font-sans text-[clamp(1.75rem,6vw,6.5rem)] font-[450] leading-[0.95] tracking-[-0.04em] [overflow-wrap:anywhere] transition-colors duration-300 hover:text-fg2"
             >
               <span className="relative block pb-4">
+                <span className="sr-only">Contact Project Premier at </span>
                 {EMAIL}
                 <StringLine edge="bottom" amp={14} handle={underline} />
               </span>
-              <span className="mt-4 block text-sm font-normal tracking-normal text-grey">{copied ? "Copied to clipboard" : "Click to copy"}</span>
             </button>
           </h1>
+          {/* The hint stays out of the headline; a click on it copies too. */}
+          <p id="copy-hint" aria-live="polite" onClick={copy} className="mt-4 cursor-pointer text-sm text-grey">
+            {copied ? "Copied to clipboard" : "Click to copy"}
+          </p>
           <Reveal trigger="load" delay={0.6} className="mt-10 max-w-prose text-body text-fg2 md:text-[1.125rem]">
             Questions about our programs, partnership ideas, or just saying hi. We'd love to hear from you.
           </Reveal>

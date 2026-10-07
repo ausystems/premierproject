@@ -9,13 +9,14 @@ const LINKS = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/programs", label: "Programs" },
+  { to: "/blog", label: "Blog" },
   { to: "/contact", label: "Contact" },
   { to: "/referral", label: "Refer a Youth" },
 ];
 
 type Props = { open: boolean; onClose: () => void };
 
-/** Full-screen ink menu: five links, and the two ways to reach us at its foot. */
+/** Full-screen ink menu: six links, and the two ways to reach us at its foot. */
 export const MenuOverlay = ({ open, onClose }: Props) => {
   const root = useRef<HTMLDivElement>(null);
   const items = useRef<HTMLLIElement[]>([]);
@@ -28,6 +29,8 @@ export const MenuOverlay = ({ open, onClose }: Props) => {
     if (!el) return;
     const reduced = prefersReducedMotion();
     const rows = items.current.filter(Boolean);
+    // A closed menu is out of the tab order and the accessibility tree, not just out of sight.
+    el.inert = !open;
 
     if (!mounted.current) {
       mounted.current = true;
@@ -77,6 +80,8 @@ export const MenuOverlay = ({ open, onClose }: Props) => {
       data-theme="ink"
       data-lenis-prevent
       aria-hidden={!open}
+      // closed from the very first (server-rendered) paint; GSAP owns these values from then on
+      style={{ clipPath: "inset(0 0 100% 0)", pointerEvents: "none" }}
       className="fixed inset-0 z-40 flex flex-col overflow-y-auto pt-nav-sm [touch-action:pan-y] pb-[env(safe-area-inset-bottom)] lg:pt-nav"
     >
       <nav aria-label="Menu" className="wrap pt-10">

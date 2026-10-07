@@ -13,14 +13,23 @@ import { StringLine } from "@/components/strings/StringLine";
 import { useVoice } from "@/components/strings/moments";
 import type { StringHandle } from "@/lib/strings";
 import { useSeo } from "@/lib/seo";
-const heroPoster = "/hero-poster.jpg";
+import { VIDEOS } from "@/seo/ld";
+import { postPath } from "@/seo/pages";
+import { postBySlug, type Post } from "@/content/posts";
 import remixLogo from "@/assets/remix-project-logo.webp";
 import trilliumLogo from "@/assets/ontario-trillium-logo.webp";
 
 const RowFollower = lazy(() => import("@/components/webgl/RowFollower").then((m) => ({ default: m.RowFollower })));
 
-const COMMUNITY = "/community.webp";
+const COMMUNITY = "/project-premier-youth-community.webp";
+const STUDIO = "/project-premier-recording-studio-guitars-1280.webp";
 const PROGRAMS = ["Music", "Recording Arts", "Life Skills", "Business Development"];
+const FEATURED = [
+  "how-to-refer-a-young-person-to-project-premier",
+  "where-can-young-artists-record-music-for-free-in-toronto",
+  "do-i-own-my-music-music-rights-for-young-artists-in-canada",
+  "can-a-music-program-help-a-teen-who-is-struggling",
+].map((slug) => postBySlug(slug) as Post);
 
 const QUOTES = [
   "Project Premier changed my life. I went from feeling lost to having a real plan for my future. Now, I'm in the studio, learning from real professionals and building a career in music. I finally feel like I have a purpose. This program gave me a second chance that no one else would!",
@@ -59,7 +68,7 @@ const Index = () => {
               </Reveal>
             </div>
             <div className="md:col-span-4 md:col-start-9 md:mt-24">
-              <ImageReveal src={COMMUNITY} alt="Project Premier community" aspect="4 / 5" width={1080} height={1350} sizes="(min-width: 768px) 33vw, 100vw" />
+              <ImageReveal src={COMMUNITY} alt="Group photo of young creators from the Project Premier community" aspect="4 / 5" width={1080} height={1350} sizes="(min-width: 768px) 33vw, 100vw" />
             </div>
           </div>
         </section>
@@ -69,26 +78,27 @@ const Index = () => {
           <div className="grid gap-8 md:grid-cols-12 md:items-end">
             <SectionTitle className="md:col-span-6">Our Programs.</SectionTitle>
             <Reveal className="text-body text-fg2 md:col-span-5 md:col-start-8">
-              Four pillars built to develop the next generation of creators, professionals, and leaders.
+              Four pillars built to develop the next generation of creators, professionals, and leaders across the GTA.
             </Reveal>
           </div>
-          <div className="row-list mt-12 md:mt-14">
+          <ul className="row-list mt-12 md:mt-14">
             {PROGRAMS.map((title, i) => (
-              <IndexRow
-                key={title}
-                title={title}
-                to="/programs"
-                onEnter={() => setActive(i)}
-                onLeave={() => setActive(null)}
-                last={i === PROGRAMS.length - 1}
-              />
+              <li key={title}>
+                <IndexRow
+                  title={title}
+                  to="/programs"
+                  onEnter={() => setActive(i)}
+                  onLeave={() => setActive(null)}
+                  last={i === PROGRAMS.length - 1}
+                />
+              </li>
             ))}
-          </div>
+          </ul>
           <Reveal className="mt-10">
             <Button variant="link" to="/programs">More About Our Programs</Button>
           </Reveal>
           <Suspense fallback={null}>
-            <RowFollower active={active} images={[heroPoster, COMMUNITY, heroPoster, COMMUNITY]} />
+            <RowFollower active={active} images={[STUDIO, COMMUNITY, STUDIO, COMMUNITY]} />
           </Suspense>
         </section>
 
@@ -103,7 +113,7 @@ const Index = () => {
               </Reveal>
             </div>
             <Reveal className="lg:col-span-8">
-              <VideoEmbed id="2z-Ztm9UHr4" title="Project Premier Video" />
+              <VideoEmbed id={VIDEOS.reflection.id} title={VIDEOS.reflection.name} />
             </Reveal>
           </div>
 
@@ -124,6 +134,26 @@ const Index = () => {
           </div>
         </section>
 
+        {/* The blog: four of the questions it answers */}
+        <section data-theme="paper" className="wrap pt-section">
+          <div className="grid gap-8 md:grid-cols-12 md:items-end">
+            <SectionTitle className="md:col-span-6">From the blog.</SectionTitle>
+            <Reveal className="text-body text-fg2 md:col-span-5 md:col-start-8">
+              Plain answers for young artists in Toronto, and for the families and youth workers who support them.
+            </Reveal>
+          </div>
+          <ul className="row-list mt-12 md:mt-14">
+            {FEATURED.map((post, i) => (
+              <li key={post.slug}>
+                <IndexRow title={post.title} to={postPath(post.slug)} last={i === FEATURED.length - 1} />
+              </li>
+            ))}
+          </ul>
+          <Reveal className="mt-10">
+            <Button variant="link" to="/blog">Read the Blog</Button>
+          </Reveal>
+        </section>
+
         {/* Partners and Get in touch */}
         <section data-theme="paper" className="wrap py-[clamp(3.5rem,6vw,6rem)]">
           <Reveal className="grid items-center gap-8 md:grid-cols-12">
@@ -134,8 +164,8 @@ const Index = () => {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-8 md:col-span-6 md:col-start-7 md:justify-end md:gap-12 lg:gap-16">
-              <img src={remixLogo} alt="The Remix Project logo" width={1462} height={622} loading="lazy" className="still h-20 w-auto md:h-24 lg:h-28" />
-              <img src={trilliumLogo} alt="Ontario Trillium Foundation logo" width={1214} height={878} loading="lazy" className="still h-20 w-auto md:h-24 lg:h-28" />
+              <img src={remixLogo} alt="The Remix Project logo" width={1486} height={713} loading="lazy" className="h-20 w-auto md:h-24 lg:h-28" />
+              <img src={trilliumLogo} alt="Ontario Trillium Foundation logo" width={1261} height={932} loading="lazy" className="h-20 w-auto md:h-24 lg:h-28" />
             </div>
           </Reveal>
 

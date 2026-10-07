@@ -15,45 +15,58 @@ const loadReferral = () => import("./pages/Referral");
 const loadPrivacy = () => import("./pages/Privacy");
 const loadTerms = () => import("./pages/Terms");
 const loadNotFound = () => import("./pages/NotFound");
+const loadBlog = () => import("./pages/Blog");
+const loadBlogPost = () => import("./pages/BlogPost");
 const Referral = lazy(loadReferral);
 const Privacy = lazy(loadPrivacy);
 const Terms = lazy(loadTerms);
 const NotFound = lazy(loadNotFound);
+const Blog = lazy(loadBlog);
+const BlogPost = lazy(loadBlogPost);
 
 /** Warm the lazy chunks once the first page is idle, so later transitions never wait on the network. */
 const Prefetch = () => {
   useEffect(() => {
-    const warm = () => { void loadReferral(); void loadPrivacy(); void loadTerms(); void loadNotFound(); };
+    const warm = () => {
+      void loadReferral(); void loadPrivacy(); void loadTerms(); void loadNotFound(); void loadBlog(); void loadBlogPost();
+    };
     if (typeof window.requestIdleCallback === "function") window.requestIdleCallback(warm, { timeout: 4000 });
     else window.setTimeout(warm, 2500);
   }, []);
   return null;
 };
 
+/** Everything inside the router; the browser wraps it in BrowserRouter, the build-time renderer in StaticRouter. */
+export const AppRoutes = () => (
+  <SmoothScroll>
+    <a
+      href="#main"
+      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-ui focus:text-paper"
+    >
+      Skip to content
+    </a>
+    <Nav />
+    <PageTransition>
+      <Route path="/" element={<Index />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/programs" element={<Programs />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogPost />} />
+      <Route path="/referral" element={<Referral />} />
+      <Route path="/privacy" element={<Privacy />} />
+      <Route path="/terms" element={<Terms />} />
+      <Route path="*" element={<NotFound />} />
+    </PageTransition>
+    <Prefetch />
+    <Toaster />
+    <Sonner />
+  </SmoothScroll>
+);
+
 const App = () => (
   <BrowserRouter>
-    <SmoothScroll>
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-ink focus:px-5 focus:py-3 focus:text-ui focus:text-paper"
-      >
-        Skip to content
-      </a>
-      <Nav />
-      <PageTransition>
-        <Route path="/" element={<Index />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/programs" element={<Programs />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/referral" element={<Referral />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="*" element={<NotFound />} />
-      </PageTransition>
-      <Prefetch />
-      <Toaster />
-      <Sonner />
-    </SmoothScroll>
+    <AppRoutes />
   </BrowserRouter>
 );
 

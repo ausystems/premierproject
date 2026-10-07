@@ -2,6 +2,9 @@
 @font-face { font-family: "Inter Tight"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("/fonts/inter-tight.woff2") format("woff2"); }
 @font-face { font-family: "Inter Tight"; font-style: italic; font-weight: 100 900; font-display: swap; src: url("/fonts/inter-tight-italic.woff2") format("woff2"); }
 @font-face { font-family: "Geist Mono"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("/fonts/geist-mono.woff2") format("woff2"); }
+/* Arial tuned to Inter Tight's width and vertical metrics, so text painted before the web font arrives
+   keeps its line breaks and height when the swap happens (no layout shift on pre-rendered pages). */
+@font-face { font-family: "Inter Tight Fallback"; src: local("Arial"), local("ArialMT"), local("Helvetica"); size-adjust: 97%; ascent-override: 100%; descent-override: 25%; line-gap-override: 0%; }
 
 @tailwind base;
 @tailwind components;
@@ -120,6 +123,35 @@
   }
 }
 
+/*
+ * Pre-rendered pages (see src/lib/ssr.ts). "js" is set by an inline script before the first paint, so
+ * everything here applies only when JavaScript will take over; without it, every word is visible.
+ * Scroll entrances wait hidden for their trigger; statements rest in grey until read; and on the first,
+ * server-rendered page, load entrances play here in CSS from the very first frame.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal="scroll"],
+  html.js [data-split="scroll"] {
+    visibility: hidden;
+  }
+  html.js [data-ink] {
+    color: rgb(var(--grey));
+  }
+  html.js.ssr [data-reveal="load"] {
+    animation: ssr-reveal 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) calc(var(--reveal-delay, 0s) * 0.6) both;
+  }
+  html.js.ssr [data-split="load"] {
+    animation: ssr-rise 0.95s cubic-bezier(0.16, 1, 0.3, 1) calc(var(--reveal-delay, 0s) * 0.6) both;
+  }
+}
+@keyframes ssr-reveal {
+  from { opacity: 0; transform: translateY(16px); }
+}
+@keyframes ssr-rise {
+  from { opacity: 0; transform: translateY(0.4em); clip-path: inset(0 -0.2em 100% -0.2em); font-weight: 300; }
+  to { opacity: 1; transform: none; clip-path: inset(-0.3em -0.2em -0.4em -0.2em); }
+}
+
 @layer components {
   /* Monospace metadata: indices, labels, captions. Never placed above a heading. */
   .meta {
@@ -193,11 +225,6 @@
   .hair-b { @apply border-b border-fg/15; }
   .hair-l { @apply border-l border-fg/15; }
   .hair-r { @apply border-r border-fg/15; }
-
-  /* Stills are rendered in black and white; the hero video is the only colour on the site. */
-  .still {
-    filter: grayscale(1) contrast(1.05);
-  }
 
   /* SplitText line masks */
   .split-mask {
