@@ -12,6 +12,8 @@ type Props = {
   loading?: "eager" | "lazy";
   fetchPriority?: "high" | "low" | "auto";
   sizes?: string;
+  /** Candidate widths, e.g. "a-540.webp 540w, a.webp 1080w"; pair it with sizes. */
+  srcSet?: string;
   width?: number;
   height?: number;
 };
@@ -19,7 +21,7 @@ type Props = {
 /** Frame that reveals its image with a clip-path inset and a settle from scale 1.15 to 1. */
 export const ImageReveal = ({
   src, alt, className, imgClassName, aspect,
-  loading = "lazy", fetchPriority, sizes, width, height,
+  loading = "lazy", fetchPriority, sizes, srcSet, width, height,
 }: Props) => {
   const frame = useRef<HTMLDivElement>(null);
   const img = useRef<HTMLImageElement>(null);
@@ -60,6 +62,7 @@ export const ImageReveal = ({
         loading={loading}
         fetchPriority={fetchPriority}
         sizes={sizes}
+        srcSet={srcSet}
         width={width}
         height={height}
         decoding="async"

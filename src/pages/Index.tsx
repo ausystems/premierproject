@@ -16,12 +16,12 @@ import { useSeo } from "@/lib/seo";
 import { VIDEOS } from "@/seo/ld";
 import { postPath } from "@/seo/pages";
 import { postBySlug, type Post } from "@/content/posts";
-import remixLogo from "@/assets/remix-project-logo.webp";
-import trilliumLogo from "@/assets/ontario-trillium-logo.webp";
+import { PartnerLogos } from "@/components/ui-kit/PartnerLogos";
 
 const RowFollower = lazy(() => import("@/components/webgl/RowFollower").then((m) => ({ default: m.RowFollower })));
 
 const COMMUNITY = "/project-premier-youth-community.webp";
+const COMMUNITY_SRCSET = "/project-premier-youth-community-540.webp 540w, /project-premier-youth-community-720.webp 720w, /project-premier-youth-community.webp 1080w";
 const STUDIO = "/project-premier-recording-studio-guitars-1280.webp";
 const PROGRAMS = ["Music", "Recording Arts", "Life Skills", "Business Development"];
 const FEATURED = [
@@ -68,7 +68,7 @@ const Index = () => {
               </Reveal>
             </div>
             <div className="md:col-span-4 md:col-start-9 md:mt-24">
-              <ImageReveal src={COMMUNITY} alt="Group photo of young creators from the Project Premier community" aspect="4 / 5" width={1080} height={1350} sizes="(min-width: 768px) 33vw, 100vw" />
+              <ImageReveal src={COMMUNITY} srcSet={COMMUNITY_SRCSET} alt="Group photo of young creators from the Project Premier community" aspect="4 / 5" width={1080} height={1350} sizes="(min-width: 768px) 33vw, 100vw" />
             </div>
           </div>
         </section>
@@ -164,8 +164,7 @@ const Index = () => {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-8 md:col-span-6 md:col-start-7 md:justify-end md:gap-12 lg:gap-16">
-              <img src={remixLogo} alt="The Remix Project logo" width={1486} height={713} loading="lazy" className="h-20 w-auto md:h-24 lg:h-28" />
-              <img src={trilliumLogo} alt="Ontario Trillium Foundation logo" width={1261} height={932} loading="lazy" className="h-20 w-auto md:h-24 lg:h-28" />
+              <PartnerLogos />
             </div>
           </Reveal>
 

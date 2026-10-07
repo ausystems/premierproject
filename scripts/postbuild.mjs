@@ -18,6 +18,14 @@ const templatePath = path.resolve(here, "..", "dist-ssr", "template.html");
 const built = fs.readFileSync(path.join(dist, "index.html"), "utf8");
 const base = built.includes('<div id="root"></div>') ? built : fs.readFileSync(templatePath, "utf8");
 fs.writeFileSync(templatePath, base);
+// The stylesheet is small: inline it so the first paint never waits on a second request. (After the
+// first page the app routes in place, so no later page load would have reused a cached file anyway.)
+const shell = (() => {
+  const link = base.match(/<link rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/);
+  if (!link) throw new Error("postbuild: stylesheet link not found");
+  const css = fs.readFileSync(path.join(dist, link[1]), "utf8");
+  return base.replace(link[0], () => `<style>${css}</style>`);
+})();
 const { render } = await import(path.resolve(here, "..", "dist-ssr", "entry-server.js"));
 
 // Site ownership for Google Search Console and Bing Webmaster Tools: set these in the hosting
@@ -66,7 +74,7 @@ const dropHeroPreload = (html) => html.replace(/\s*<link rel="preload" as="image
 
 const shellFor = (routePath, page) => {
   const url = `${SITE_URL}${routePath}`;
-  let html = base.replace(/<title>[^<]*<\/title>/, `<title>${esc(page.title)}</title>`);
+  let html = shell.replace(/<title>[^<]*<\/title>/, `<title>${esc(page.title)}</title>`);
   html = setMeta(html, "name", "description", page.description);
   html = setMeta(html, "property", "og:title", page.title);
   html = setMeta(html, "property", "og:description", page.description);
@@ -105,7 +113,7 @@ for (const [routePath, page] of Object.entries(PAGES)) {
 // Unknown URLs: Vercel answers with dist/404.html and a real 404 status. The app boots on it and shows
 // the designed not-found page; crawlers that do not run JavaScript get the same noindex metadata.
 {
-  let html = base.replace(/<title>[^<]*<\/title>/, `<title>${esc(NOT_FOUND.title)}</title>`);
+  let html = shell.replace(/<title>[^<]*<\/title>/, `<title>${esc(NOT_FOUND.title)}</title>`);
   html = setMeta(html, "name", "description", NOT_FOUND.description);
   html = setMeta(html, "name", "robots", "noindex, nofollow");
   html = setMeta(html, "property", "og:title", NOT_FOUND.title);

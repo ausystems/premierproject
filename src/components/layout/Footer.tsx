@@ -7,7 +7,7 @@ import { StringLine } from "@/components/strings/StringLine";
 import { useLastNote } from "@/components/strings/moments";
 import type { StringHandle } from "@/lib/strings";
 
-const LOGO = "/project-premier-logo.png";
+const LOGO = "/project-premier-logo.webp";
 
 const LINKS = [
   { to: "/", label: "Home" },

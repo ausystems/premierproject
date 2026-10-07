@@ -4,7 +4,7 @@ import { gsap, ScrollTrigger, EASE_REVEAL, prefersReducedMotion, transitionState
 import { useLenis } from "@/lib/SmoothScroll";
 import { endServerFirstPaint } from "@/lib/ssr";
 
-const LOGO = "/project-premier-logo.png";
+const LOGO = "/project-premier-logo.webp";
 const CURTAIN_IN = 0.45;
 const LOGO_IN = 0.4;
 const HOLD = 0.08;
